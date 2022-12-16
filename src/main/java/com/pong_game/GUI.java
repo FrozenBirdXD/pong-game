@@ -2,6 +2,7 @@ package com.pong_game;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -31,6 +32,15 @@ public class GUI extends Application {
         Image icon = new Image("Icon.png");
         stage.getIcons().add(icon);
         
+        // creates start button
+        Button startButton = new Button("start game");
+        startButton.setDefaultButton(true);
+        startButton.setLayoutX(554);
+        startButton.setLayoutY(306);
+        startButton.setPrefHeight(34); 
+        startButton.setPrefWidth(90);
+        startButton.setFont(Font.font("Veranda", 14));
+
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
         Circle ball = new Circle(600, 400, 20, Color.rgb(212,130,47));
@@ -44,7 +54,7 @@ public class GUI extends Application {
         slider1.setStroke(Color.BLACK);
         slider1.setStrokeType(StrokeType.INSIDE);
         
-        // creates slider2 node (left)
+        // creates slider2 node (right)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
         Rectangle slider2 = new Rectangle(1130, 330, 20, 140);
         slider2.setArcHeight(5.0);
@@ -79,7 +89,7 @@ public class GUI extends Application {
         
         
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, instruction, scorePlayer1, scorePlayer2, colon);
+        root.getChildren().addAll(startButton, ball, slider1, slider2, instruction, scorePlayer1, scorePlayer2, colon);
 
         // stage configs
         stage.setScene(scene);
