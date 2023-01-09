@@ -1,5 +1,8 @@
 package com.pong_game;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -20,6 +23,11 @@ public class Pong extends Application {
 
     public int slider1Y = 330;
     public int slider2Y = 330;
+    public int sliderSpeed = 20;
+    public int ballCenterX = 600;
+    public int ballCenterY = 400;
+    public int velocityX = 6;
+    public int velocityY = 6;
     public static void main(String[] args) {
         // launches start method
         launch(args);  
@@ -51,7 +59,8 @@ public class Pong extends Application {
 
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
-        Circle ball = new Circle(600, 400, 20, Color.rgb(212,130,47));
+        Circle ball = new Circle(ballCenterX, ballCenterY, 20, Color.rgb(212,130,47));
+        
         
         
         // creates slider1 node (left)
@@ -74,7 +83,7 @@ public class Pong extends Application {
 
         // creates (temporary) instructions
         // constructor: OriginX, OriginY, "Text"
-        Text instruction = new Text(513, 486, "use 'w' and 's' for player 1 use '↑' and '↓' for player 2");
+        Text instruction = new Text(513, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
         instruction.setTextAlignment(TextAlignment.CENTER);
         instruction.setFont(Font.font("Veranda", 14));
         instruction.setWrappingWidth(174.936767578125);
@@ -109,32 +118,31 @@ public class Pong extends Application {
         stage.show();
 
         EventHandler banana = new EventHandler<KeyEvent>() {
-
         
             @Override
             public void handle(KeyEvent key) {
                 switch (key.getCode()) {
                 case W:
-                    if (slider1Y - 15 > -10) {
-                        slider1Y -= 15;
+                    if (slider1Y - sliderSpeed > -10) {
+                        slider1Y -= sliderSpeed;
                     }
                     slider1.setY(slider1Y);
                     break;
                 case S:
-                    if (slider1Y + 15 < 631) {
-                        slider1Y += 15;
+                    if (slider1Y + sliderSpeed < 631) {
+                        slider1Y += sliderSpeed;
                     }
                     slider1.setY(slider1Y);
                     break;
                 case NUMPAD8:
-                    if (slider2Y - 15 > -10) {
-                        slider2Y -= 15;
+                    if (slider2Y - sliderSpeed > -10) {
+                        slider2Y -= sliderSpeed;
                     }
                     slider2.setY(slider2Y);
                     break;
                 case NUMPAD5:
-                    if (slider2Y - 15 < 631) {
-                        slider2Y += 15;
+                    if (slider2Y - sliderSpeed < 631) {
+                        slider2Y += sliderSpeed;
                     }
                     slider2.setY(slider2Y);
                     break;
@@ -144,20 +152,35 @@ public class Pong extends Application {
             }
         };
 
-        
         // key event handler
         scene.addEventHandler(KeyEvent.KEY_PRESSED, banana); 
 
+        // ball movement
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                if(ballCenterX - ball.getRadius() <= 0 || ballCenterX + ball.getRadius() >= 1200) {
+                    velocityX =- velocityX;
+                    
+                }
+
+                if(ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
+                    velocityY =- velocityY;
+                    
+                }
+                
+                ball.setCenterX(ballCenterX += velocityX);
+                ball.setCenterY(ballCenterY += velocityY);
+            }
+
+        }, 500, 40);
 
         } catch(Exception e) {
             e.printStackTrace();
         }
-
-        
-
-            
-        
-     
     }
-
 }
