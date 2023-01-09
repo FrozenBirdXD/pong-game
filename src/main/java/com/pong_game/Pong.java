@@ -3,7 +3,6 @@ package com.pong_game;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -33,6 +32,9 @@ public class Pong extends Application {
     public int ballCenterY = randomY;
     public int velocityX = 6;
     public int velocityY = 6;
+    public int scorePlayer1 = 0;
+    public int scorePlayer2 = 0;
+
     public static void main(String[] args) {
         // launches start method
         launch(args);  
@@ -123,7 +125,7 @@ public class Pong extends Application {
         stage.setHeight(800);
         stage.show();
 
-        EventHandler banana = new EventHandler<KeyEvent>() {
+        EventHandler event = new EventHandler<KeyEvent>() {
         
             @Override
             public void handle(KeyEvent key) {
@@ -159,7 +161,7 @@ public class Pong extends Application {
         };
 
         // key event handler
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, banana); 
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
 
         // background ticks
         
@@ -184,8 +186,22 @@ public class Pong extends Application {
                     velocityY =- velocityY;
                 }
                 
-                // reset game when point is scored
-                if (ballCenterX - ball.getRadius() <= 0 || ballCenterX + ball.getRadius() >= 1200) {
+                // reset game when and update scores when point is scored
+            
+                if (ballCenterX - ball.getRadius() <= 0) {
+                    Pong.this.scorePlayer2 += 1;
+                    String scoreR1 = String.valueOf(Pong.this.scorePlayer2);
+                    scorePlayer2.setText(scoreR1);
+                    reset();
+                    slider1.setY(slider1Y);
+                    slider2.setY(slider2Y);
+                    ball.setCenterX(ballCenterX);
+                }
+
+                if (ballCenterX + ball.getRadius() >= 1200) {
+                    Pong.this.scorePlayer1 += 1;
+                    String scoreR1 = String.valueOf(Pong.this.scorePlayer1);
+                    scorePlayer1.setText(scoreR1);
                     reset();
                     slider1.setY(slider1Y);
                     slider2.setY(slider2Y);
