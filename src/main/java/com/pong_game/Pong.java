@@ -53,13 +53,13 @@ public class Pong extends Application {
         stage.getIcons().add(icon);
         
         // creates start button
-        Button startButton = new Button("start game");
+        /* Button startButton = new Button("start game");
         startButton.setDefaultButton(true);
         startButton.setLayoutX(554);
         startButton.setLayoutY(306);
         startButton.setPrefHeight(34); 
         startButton.setPrefWidth(90);
-        startButton.setFont(Font.font("Veranda", 14));
+        startButton.setFont(Font.font("Veranda", 14)); */
 
         // create event handling for start button
         
@@ -89,12 +89,17 @@ public class Pong extends Application {
         slider2.setStroke(Color.BLACK);
         slider2.setStrokeType(StrokeType.INSIDE);
 
+        // creates winning text
+        Text winner = new Text(480, 486, "");
+        winner.setTextAlignment(TextAlignment.CENTER);  
+        winner.setFont(Font.font("Veranda", 40));
+
         // creates (temporary) instructions
         // constructor: OriginX, OriginY, "Text"
-        Text instruction = new Text(513, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
+        /* Text instruction = new Text(513, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
         instruction.setTextAlignment(TextAlignment.CENTER);
         instruction.setFont(Font.font("Veranda", 14));
-        instruction.setWrappingWidth(174.936767578125);
+        instruction.setWrappingWidth(174.936767578125); */
 
         // creates scoreboard
         Text scorePlayer1 = new Text(485, 98, "0");
@@ -115,7 +120,7 @@ public class Pong extends Application {
         
         
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(startButton, ball, slider1, slider2, instruction, scorePlayer1, scorePlayer2, colon);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner);
 
         // stage configs
         stage.setScene(scene);
@@ -211,6 +216,16 @@ public class Pong extends Application {
                 // ball movement
                 ball.setCenterX(ballCenterX += velocityX);
                 ball.setCenterY(ballCenterY += velocityY);
+
+                if (Pong.this.scorePlayer1 == 5) {
+                    winner.setText("Player 1 WINS!");
+                    timer.cancel();
+                }
+
+                if (Pong.this.scorePlayer2 == 5) {
+                    winner.setText("Player 2 WINS!");
+                    timer.cancel();
+                }
             }
 
         }, 2000, 40);
