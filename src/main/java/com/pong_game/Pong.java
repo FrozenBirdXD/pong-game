@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class GUI extends Application {
+public class Pong extends Application {
 
     public int slider1Y = 330;
     public int slider2Y = 330;
