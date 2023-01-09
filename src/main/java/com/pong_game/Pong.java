@@ -1,7 +1,9 @@
 package com.pong_game;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -21,11 +23,14 @@ import javafx.stage.Stage;
 
 public class Pong extends Application {
 
+    Random rand = new Random();
+    int randomY = rand.nextInt(700) + 50;
+
     public int slider1Y = 330;
     public int slider2Y = 330;
     public int sliderSpeed = 20;
     public int ballCenterX = 600;
-    public int ballCenterY = 400;
+    public int ballCenterY = randomY;
     public int velocityX = 6;
     public int velocityY = 6;
     public static void main(String[] args) {
@@ -56,10 +61,11 @@ public class Pong extends Application {
 
         // create event handling for start button
         
+       
 
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
-        Circle ball = new Circle(ballCenterX, ballCenterY, 20, Color.rgb(212,130,47));
+        Circle ball = new Circle(ballCenterX, randomY, 20, Color.rgb(212,130,47));
         
         
         
@@ -156,7 +162,7 @@ public class Pong extends Application {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, banana); 
 
         // background ticks
-
+        
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -174,14 +180,16 @@ public class Pong extends Application {
                 }
 
                 // ball collision detection with boundaries
-                if(ballCenterX - ball.getRadius() <= 0 || ballCenterX + ball.getRadius() >= 1200) {
-                    velocityX =- velocityX;
-                    
-                }
-
-                if(ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
+                if (ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
                     velocityY =- velocityY;
-                    
+                }
+                
+                // reset game when point is scored
+                if (ballCenterX - ball.getRadius() <= 0 || ballCenterX + ball.getRadius() >= 1200) {
+                    reset();
+                    slider1.setY(slider1Y);
+                    slider2.setY(slider2Y);
+                    ball.setCenterX(ballCenterX);
                 }
                 
                 // ball movement
@@ -189,10 +197,17 @@ public class Pong extends Application {
                 ball.setCenterY(ballCenterY += velocityY);
             }
 
-        }, 500, 40);
+        }, 2000, 40);
 
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void reset(){
+        slider1Y = 330;
+        slider2Y = 330;
+        ballCenterX = 600;
+        
     }
 }
