@@ -1,9 +1,11 @@
 package com.pong_game;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,6 +18,8 @@ import javafx.stage.Stage;
 
 public class GUI extends Application {
 
+    public int slider1Y = 330;
+    public int slider2Y = 330;
     public static void main(String[] args) {
         // launches start method
         launch(args);  
@@ -24,6 +28,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try {
+        
         // creates root node and scene 
         AnchorPane root = new AnchorPane();
         Scene scene = new Scene(root, Color.LIGHTGRAY);
@@ -41,13 +46,17 @@ public class GUI extends Application {
         startButton.setPrefWidth(90);
         startButton.setFont(Font.font("Veranda", 14));
 
+        // create event handling for start button
+        
+
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
         Circle ball = new Circle(600, 400, 20, Color.rgb(212,130,47));
         
+        
         // creates slider1 node (left)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
-        Rectangle slider1 = new Rectangle(50, 330, 20, 140);
+        Rectangle slider1 = new Rectangle(50, slider1Y, 20, 140);
         slider1.setArcHeight(5.0);
         slider1.setArcWidth(5.0);
         slider1.setFill(Color.rgb(127, 144, 255));
@@ -56,7 +65,7 @@ public class GUI extends Application {
         
         // creates slider2 node (right)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
-        Rectangle slider2 = new Rectangle(1130, 330, 20, 140);
+        Rectangle slider2 = new Rectangle(1130, slider2Y, 20, 140);
         slider2.setArcHeight(5.0);
         slider2.setArcWidth(5.0);
         slider2.setFill(Color.rgb(127, 144, 255));
@@ -98,9 +107,56 @@ public class GUI extends Application {
         stage.setWidth(1210);
         stage.setHeight(800);
         stage.show();
+
+        EventHandler banana = new EventHandler<KeyEvent>() {
+
+        
+            @Override
+            public void handle(KeyEvent key) {
+                switch (key.getCode()) {
+                case W:
+                    if (slider1Y - 15 > -10) {
+                        slider1Y -= 15;
+                    }
+                    slider1.setY(slider1Y);
+                    break;
+                case S:
+                    if (slider1Y + 15 < 631) {
+                        slider1Y += 15;
+                    }
+                    slider1.setY(slider1Y);
+                    break;
+                case NUMPAD8:
+                    if (slider2Y - 15 > -10) {
+                        slider2Y -= 15;
+                    }
+                    slider2.setY(slider2Y);
+                    break;
+                case NUMPAD5:
+                    if (slider2Y - 15 < 631) {
+                        slider2Y += 15;
+                    }
+                    slider2.setY(slider2Y);
+                    break;
+                default:
+                    break;
+                }
+            }
+        };
+
+        
+        // key event handler
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, banana); 
+
+
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+        
+
+            
+        
      
     }
 
