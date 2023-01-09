@@ -155,7 +155,7 @@ public class Pong extends Application {
         // key event handler
         scene.addEventHandler(KeyEvent.KEY_PRESSED, banana); 
 
-        // ball movement
+        // background ticks
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -163,6 +163,17 @@ public class Pong extends Application {
             @Override
             public void run() {
 
+                // ball collision detection with slider 1
+                if (slider1.getY() < ballCenterY + ball.getRadius() && slider1.getY() + 140 > ballCenterY - ball.getRadius() && slider1.getX() < ballCenterX + ball.getRadius() && slider1.getX() + 20 > ballCenterX - ball.getRadius()) {
+                    velocityX =- velocityX;
+                }
+
+                // ball collision detection with slider 2
+                if (slider2.getY() < ballCenterY + ball.getRadius() && slider2.getY() + 140 > ballCenterY - ball.getRadius() && slider2.getX() < ballCenterX + ball.getRadius() && slider2.getX() > ballCenterX - ball.getRadius()) {
+                    velocityX =- velocityX;
+                }
+
+                // ball collision detection with boundaries
                 if(ballCenterX - ball.getRadius() <= 0 || ballCenterX + ball.getRadius() >= 1200) {
                     velocityX =- velocityX;
                     
@@ -173,6 +184,7 @@ public class Pong extends Application {
                     
                 }
                 
+                // ball movement
                 ball.setCenterX(ballCenterX += velocityX);
                 ball.setCenterY(ballCenterY += velocityY);
             }
