@@ -49,7 +49,7 @@ public class Pong extends Application {
         Scene scene = new Scene(root, Color.LIGHTGRAY);
 
         // adds icon.png as the icon
-        Image icon = new Image("Icon.png");
+        Image icon = new Image("pongIcon.png");
         stage.getIcons().add(icon);
         
         // creates start button
@@ -62,14 +62,10 @@ public class Pong extends Application {
         startButton.setFont(Font.font("Veranda", 14)); */
 
         // create event handling for start button
-        
-       
 
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
         Circle ball = new Circle(ballCenterX, randomY, 20, Color.rgb(212,130,47));
-        
-        
         
         // creates slider1 node (left)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
@@ -96,10 +92,15 @@ public class Pong extends Application {
 
         // creates (temporary) instructions
         // constructor: OriginX, OriginY, "Text"
-        /* Text instruction = new Text(513, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
-        instruction.setTextAlignment(TextAlignment.CENTER);
+        Text instruction = new Text(384, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
         instruction.setFont(Font.font("Veranda", 14));
-        instruction.setWrappingWidth(174.936767578125); */
+
+        Text instruction2 = new Text(501, 550, "Game starts in 5 seconds!");
+        instruction2.setFont(Font.font("Veranda", 18));
+
+        Text instruction3 = new Text(482, 505, "Press Spacebar to remove instructions");
+        instruction3.setFont(Font.font("Veranda", 14));
+        
 
         // creates scoreboard
         Text scorePlayer1 = new Text(485, 98, "0");
@@ -118,9 +119,9 @@ public class Pong extends Application {
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
         
-        
+
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner, instruction, instruction2, instruction3);
 
         // stage configs
         stage.setScene(scene);
@@ -136,7 +137,7 @@ public class Pong extends Application {
             public void handle(KeyEvent key) {
                 switch (key.getCode()) {
                 case W:
-                    if (slider1Y - sliderSpeed > -10) {
+                    if (slider1Y - sliderSpeed > -20) {
                         slider1Y -= sliderSpeed;
                     }
                     slider1.setY(slider1Y);
@@ -148,7 +149,7 @@ public class Pong extends Application {
                     slider1.setY(slider1Y);
                     break;
                 case NUMPAD8:
-                    if (slider2Y - sliderSpeed > -10) {
+                    if (slider2Y - sliderSpeed > -20) {
                         slider2Y -= sliderSpeed;
                     }
                     slider2.setY(slider2Y);
@@ -159,6 +160,10 @@ public class Pong extends Application {
                     }
                     slider2.setY(slider2Y);
                     break;
+                case SPACE:
+                    instruction.setOpacity(0);
+                    instruction2.setOpacity(0);
+                    instruction3.setOpacity(0);
                 default:
                     break;
                 }
@@ -169,8 +174,8 @@ public class Pong extends Application {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
 
         // background ticks
-        
         Timer timer = new Timer();
+
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
@@ -228,14 +233,14 @@ public class Pong extends Application {
                 }
             }
 
-        }, 2000, 40);
+        }, 5000, 40);
 
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void reset(){
+    public void reset() {
         slider1Y = 330;
         slider2Y = 330;
         ballCenterX = 600;
