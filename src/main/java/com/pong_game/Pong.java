@@ -5,11 +5,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,6 +37,11 @@ public class Pong extends Application {
     public int velocityY = 6;
     public int scorePlayer1 = 0;
     public int scorePlayer2 = 0;
+    public boolean paused = false;
+    public boolean wPressed = false;
+    public boolean sPressed = false;
+    public boolean num5Pressed = false;
+    public boolean num8Pressed = false;
 
     public static void main(String[] args) {
         // launches start method
@@ -65,7 +73,7 @@ public class Pong extends Application {
 
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
-        Circle ball = new Circle(ballCenterX, randomY, 20, Color.rgb(212,130,47));
+        Circle ball = new Circle(ballCenterX, randomY, 20, Color.rgb(212, 130, 47));
         
         // creates slider1 node (left)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
@@ -135,43 +143,51 @@ public class Pong extends Application {
         
             @Override
             public void handle(KeyEvent key) {
-                switch (key.getCode()) {
-                case W:
-                    if (slider1Y - sliderSpeed > -20) {
-                        slider1Y -= sliderSpeed;
+                if (key.getCode() == KeyCode.P) {
+                    paused = !paused;
+                }
+                
+                if (!paused) {
+                    switch (key.getCode()) {
+                        case W:
+                            if (slider1Y - sliderSpeed > -20) {
+                                slider1Y -= sliderSpeed;
+                            }
+                            slider1.setY(slider1Y);
+                            break;
+                        case S:
+                            if (slider1Y + sliderSpeed < 631) {
+                                slider1Y += sliderSpeed;
+                            }
+                            slider1.setY(slider1Y);
+                            break;
+                        case NUMPAD8:
+                            if (slider2Y - sliderSpeed > -20) {
+                                slider2Y -= sliderSpeed;
+                            }
+                            slider2.setY(slider2Y);
+                            break;
+                        case NUMPAD5:
+                            if (slider2Y - sliderSpeed < 631) {
+                                slider2Y += sliderSpeed;
+                            }
+                            slider2.setY(slider2Y);
+                            break;
+                        case SPACE:
+                            instruction.setOpacity(0);
+                            instruction2.setOpacity(0);
+                            instruction3.setOpacity(0);
+                        default:
+                            break;
                     }
-                    slider1.setY(slider1Y);
-                    break;
-                case S:
-                    if (slider1Y + sliderSpeed < 631) {
-                        slider1Y += sliderSpeed;
-                    }
-                    slider1.setY(slider1Y);
-                    break;
-                case NUMPAD8:
-                    if (slider2Y - sliderSpeed > -20) {
-                        slider2Y -= sliderSpeed;
-                    }
-                    slider2.setY(slider2Y);
-                    break;
-                case NUMPAD5:
-                    if (slider2Y - sliderSpeed < 631) {
-                        slider2Y += sliderSpeed;
-                    }
-                    slider2.setY(slider2Y);
-                    break;
-                case SPACE:
-                    instruction.setOpacity(0);
-                    instruction2.setOpacity(0);
-                    instruction3.setOpacity(0);
-                default:
-                    break;
                 }
             }
         };
 
         // key event handler
+        
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
+        
 
         // background ticks
         Timer timer = new Timer();
@@ -180,56 +196,57 @@ public class Pong extends Application {
 
             @Override
             public void run() {
+                if (!paused) {
 
-                // ball collision detection with slider 1
-                if (slider1.getY() < ballCenterY + ball.getRadius() && slider1.getY() + 140 > ballCenterY - ball.getRadius() && slider1.getX() < ballCenterX + ball.getRadius() && slider1.getX() + 20 > ballCenterX - ball.getRadius()) {
-                    velocityX =- velocityX;
-                }
+                    // ball collision detection with slider 1
+                    if (slider1.getY() < ballCenterY + ball.getRadius() && slider1.getY() + 140 > ballCenterY - ball.getRadius() && slider1.getX() < ballCenterX + ball.getRadius() && slider1.getX() + 20 > ballCenterX - ball.getRadius()) {
+                        velocityX =- velocityX;
+                    }
 
-                // ball collision detection with slider 2
-                if (slider2.getY() < ballCenterY + ball.getRadius() && slider2.getY() + 140 > ballCenterY - ball.getRadius() && slider2.getX() < ballCenterX + ball.getRadius() && slider2.getX() > ballCenterX - ball.getRadius()) {
-                    velocityX =- velocityX;
-                }
+                    // ball collision detection with slider 2
+                    if (slider2.getY() < ballCenterY + ball.getRadius() && slider2.getY() + 140 > ballCenterY - ball.getRadius() && slider2.getX() < ballCenterX + ball.getRadius() && slider2.getX() > ballCenterX - ball.getRadius()) {
+                        velocityX =- velocityX;
+                    }
 
-                // ball collision detection with boundaries
-                if (ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
-                    velocityY =- velocityY;
-                }
-                
-                // reset game when and update scores when point is scored
-            
-                if (ballCenterX - ball.getRadius() <= 0) {
-                    Pong.this.scorePlayer2 += 1;
-                    String scoreR1 = String.valueOf(Pong.this.scorePlayer2);
-                    scorePlayer2.setText(scoreR1);
-                    reset();
-                    slider1.setY(slider1Y);
-                    slider2.setY(slider2Y);
-                    ball.setCenterX(ballCenterX);
-                }
+                    // ball collision detection with boundaries
+                    if (ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
+                        velocityY =- velocityY;
+                    }
+                    
+                    // reset game when and update scores when point is scored
+                    if (ballCenterX - ball.getRadius() <= 0) {
+                        Pong.this.scorePlayer2 += 1;
+                        String scoreR1 = String.valueOf(Pong.this.scorePlayer2);
+                        scorePlayer2.setText(scoreR1);
+                        reset();
+                        slider1.setY(slider1Y);
+                        slider2.setY(slider2Y);
+                        ball.setCenterX(ballCenterX);
+                    }
 
-                if (ballCenterX + ball.getRadius() >= 1200) {
-                    Pong.this.scorePlayer1 += 1;
-                    String scoreR1 = String.valueOf(Pong.this.scorePlayer1);
-                    scorePlayer1.setText(scoreR1);
-                    reset();
-                    slider1.setY(slider1Y);
-                    slider2.setY(slider2Y);
-                    ball.setCenterX(ballCenterX);
-                }
-                
-                // ball movement
-                ball.setCenterX(ballCenterX += velocityX);
-                ball.setCenterY(ballCenterY += velocityY);
+                    if (ballCenterX + ball.getRadius() >= 1200) {
+                        Pong.this.scorePlayer1 += 1;
+                        String scoreR1 = String.valueOf(Pong.this.scorePlayer1);
+                        scorePlayer1.setText(scoreR1);
+                        reset();
+                        slider1.setY(slider1Y);
+                        slider2.setY(slider2Y);
+                        ball.setCenterX(ballCenterX);
+                    }
+                    
+                    // ball movement
+                    ball.setCenterX(ballCenterX += velocityX);
+                    ball.setCenterY(ballCenterY += velocityY);
 
-                if (Pong.this.scorePlayer1 == 5) {
-                    winner.setText("Player 1 WINS!");
-                    timer.cancel();
-                }
+                    if (Pong.this.scorePlayer1 == 5) {
+                        winner.setText("Player 1 WINS!");
+                        timer.cancel();
+                    }
 
-                if (Pong.this.scorePlayer2 == 5) {
-                    winner.setText("Player 2 WINS!");
-                    timer.cancel();
+                    if (Pong.this.scorePlayer2 == 5) {
+                        winner.setText("Player 2 WINS!");
+                        timer.cancel();
+                    }
                 }
             }
 
