@@ -1,18 +1,14 @@
 package com.pong_game;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -38,10 +34,6 @@ public class Pong extends Application {
     public int scorePlayer1 = 0;
     public int scorePlayer2 = 0;
     public boolean paused = false;
-    public boolean wPressed = false;
-    public boolean sPressed = false;
-    public boolean num5Pressed = false;
-    public boolean num8Pressed = false;
 
     public static void main(String[] args) {
         // launches start method
@@ -187,29 +179,25 @@ public class Pong extends Application {
         // key event handler
         
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
-        
 
-        // background ticks
-        Timer timer = new Timer();
-
-        timer.scheduleAtFixedRate(new TimerTask() {
+        AnimationTimer ballMovement = new AnimationTimer() {
 
             @Override
-            public void run() {
+            public void handle(long now) {
                 if (!paused) {
-
+                
                     // ball collision detection with slider 1
-                    if (slider1.getY() < ballCenterY + ball.getRadius() && slider1.getY() + 140 > ballCenterY - ball.getRadius() && slider1.getX() < ballCenterX + ball.getRadius() && slider1.getX() + 20 > ballCenterX - ball.getRadius()) {
+                    if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
                         velocityX =- velocityX;
                     }
 
                     // ball collision detection with slider 2
-                    if (slider2.getY() < ballCenterY + ball.getRadius() && slider2.getY() + 140 > ballCenterY - ball.getRadius() && slider2.getX() < ballCenterX + ball.getRadius() && slider2.getX() > ballCenterX - ball.getRadius()) {
+                    if (ball.getBoundsInParent().intersects(slider2.getBoundsInParent())) {
                         velocityX =- velocityX;
                     }
 
                     // ball collision detection with boundaries
-                    if (ballCenterY - ball.getRadius() <= 0 || ballCenterY + ball.getRadius() >= 770) {
+                    if (ball.getCenterY() >= 745 || ball.getCenterY() <= 20) {
                         velocityY =- velocityY;
                     }
                     
@@ -234,27 +222,26 @@ public class Pong extends Application {
                         ball.setCenterX(ballCenterX);
                     }
                     
-                    // ball movement
-                    ball.setCenterX(ballCenterX += velocityX);
-                    ball.setCenterY(ballCenterY += velocityY);
+                    updateBall(ball);
 
-                    if (Pong.this.scorePlayer1 == 5) {
+                    if (wins(Pong.this.scorePlayer1)) {
                         winner.setText("Player 1 WINS!");
-                        timer.cancel();
+                        stop();
                     }
 
-                    if (Pong.this.scorePlayer2 == 5) {
+                    if (wins(Pong.this.scorePlayer2)) {
                         winner.setText("Player 2 WINS!");
-                        timer.cancel();
+                        stop();
                     }
                 }
             }
+        };
 
-        }, 5000, 40);
-
+        ballMovement.start();
+        
         } catch(Exception e) {
             e.printStackTrace();
-        }
+        }   
     }
 
     public void reset() {
@@ -262,5 +249,14 @@ public class Pong extends Application {
         slider2Y = 330;
         ballCenterX = 600;
         
+    }
+
+    public boolean wins(int score) {
+        return score == 5;
+    }
+
+    public void updateBall(Circle ball) {
+        ball.setCenterX(ballCenterX += velocityX);
+        ball.setCenterY(ballCenterY += velocityY);
     }
 }
