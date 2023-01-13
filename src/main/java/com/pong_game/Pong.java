@@ -185,20 +185,7 @@ public class Pong extends Application {
                 if (!paused && dt > 3e7) {
                     prevTime = now;
 
-                    // ball collision detection with slider 1
-                    if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
-                        velocityX =- velocityX;
-                    }
-
-                    // ball collision detection with slider 2
-                    if (ball.getBoundsInParent().intersects(slider2.getBoundsInParent())) {
-                        velocityX =- velocityX;
-                    }
-
-                    // ball collision detection with boundaries
-                    if (ball.getCenterY() >= 745 || ball.getCenterY() <= 20) {
-                        velocityY =- velocityY;
-                    }
+                    ballCollision(ball, slider1, slider2);
                     
                     // reset game when and update scores when point is scored
                     if (ballCenterX - ball.getRadius() <= 0) {
@@ -221,7 +208,7 @@ public class Pong extends Application {
                         ball.setCenterX(ballCenterX);
                     }
                     
-                    updateBall(ball);
+                    updateBallPosition(ball);
 
                     if (wins(Pong.this.scorePlayer1)) {
                         winner.setText("Player 1 WINS!");
@@ -254,8 +241,26 @@ public class Pong extends Application {
         return score == 5;
     }
 
-    public void updateBall(Circle ball) {
+
+    public void updateBallPosition(Circle ball) {
         ball.setCenterX(ballCenterX += velocityX);
         ball.setCenterY(ballCenterY += velocityY);
+    }
+
+    public void ballCollision(Circle ball, Rectangle slider1, Rectangle slider2) {
+        // ball collision detection with slider 1
+        if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
+            velocityX =- velocityX;
+        }
+
+        // ball collision detection with slider 2
+        if (ball.getBoundsInParent().intersects(slider2.getBoundsInParent())) {
+            velocityX =- velocityX;
+        }
+
+        // ball collision detection with boundaries
+        if (ball.getCenterY() >= 745 || ball.getCenterY() <= 20) {
+            velocityY =- velocityY;
+        }
     }
 }
