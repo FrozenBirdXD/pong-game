@@ -1,10 +1,13 @@
 package com.pong_game;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -26,7 +29,7 @@ public class Pong extends Application {
 
     public int slider1Y = 330;
     public int slider2Y = 330;
-    public int sliderSpeed = 20;
+    public int sliderSpeed = 10;
     public int ballCenterX = 600;
     public int ballCenterY = randomY;
     public int velocityX = 6;
@@ -116,55 +119,32 @@ public class Pong extends Application {
         stage.setHeight(800);
         stage.show();
 
-        EventHandler event = new EventHandler<KeyEvent>() {
+        // create a set that stores all of the keys that are pressed at any moment
+        Set<KeyCode> keyPressed = new HashSet<KeyCode>();
 
+        // add an event handler to the scene to listen for keys pressed
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent key) {
-                if (key.getCode() == KeyCode.P) {
-                    paused = !paused;
-                }
                 
-                if (!paused) {
-                    switch (key.getCode()) {
-                        case W:
-                            if (slider1Y - sliderSpeed > -20) {
-                                slider1Y -= sliderSpeed;
-                            }
-                            slider1.setY(slider1Y);
-                            break;
-                        case S:
-                            if (slider1Y + sliderSpeed < 631) {
-                                slider1Y += sliderSpeed;
-                            }
-                            slider1.setY(slider1Y);
-                            break;
-                        case NUMPAD8:
-                            if (slider2Y - sliderSpeed > -20) {
-                                slider2Y -= sliderSpeed;
-                            }
-                            slider2.setY(slider2Y);
-                            break;
-                        case NUMPAD5:
-                            if (slider2Y - sliderSpeed < 631) {
-                                slider2Y += sliderSpeed;
-                            }
-                            slider2.setY(slider2Y);
-                            break;
-                        case SPACE:
-                            instruction.setOpacity(0);
-                            instruction3.setOpacity(0);
-                        default:
-                            break;
-                    }
+                if (key.getCode().equals(KeyCode.P)) {
+                    paused = !paused;
+                } else {
+                    keyPressed.add(key.getCode());
                 }
             }
-        };
+        });
 
-        // key event handler
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
+        // add an event handler to the scene to listen for keys released
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent key) {
+                keyPressed.remove(key.getCode());
+            }
+        });
 
         // ball movement, ball detection and main game mechanics
-        AnimationTimer ballMovement = new AnimationTimer() {
+        AnimationTimer gameTicks = new AnimationTimer() {
             private long prevTime = 0;
 
             @Override
@@ -174,7 +154,7 @@ public class Pong extends Application {
                 // checks if the game is not paused and if the time difference from the animation update is bigger that the given value
                 if (!paused && dt > 3e7) {
                     prevTime = now;
-
+                    keyboardInput(keyPressed, slider1, slider2, instruction, instruction3);
                     ballCollision(ball, slider1, slider2);
                     scorePoint(ball, slider1, slider2, scorePlayer2, scorePlayer1);
                     ifPlayerWins(winner);
@@ -186,11 +166,38 @@ public class Pong extends Application {
             }
         };
 
-        ballMovement.start();
+        gameTicks.start();
         
         } catch(Exception e) {
             e.printStackTrace();
         }   
+    }
+
+    public void keyboardInput(Set keyPressed, Rectangle slider1, Rectangle slider2, Text instruction, Text instruction3) {
+        if (keyPressed.contains(KeyCode.W)) {
+            if (slider1Y - sliderSpeed > -20) {
+                slider1Y -= sliderSpeed;
+            }
+            slider1.setY(slider1Y);
+        } else if (keyPressed.contains(KeyCode.S)) {
+            if (slider1Y + sliderSpeed < 631) {
+                slider1Y += sliderSpeed;
+            }
+            slider1.setY(slider1Y);
+        } else if (keyPressed.contains(KeyCode.NUMPAD8)) {
+            if (slider2Y - sliderSpeed > -20) {
+                slider2Y -= sliderSpeed;
+            }
+            slider2.setY(slider2Y);
+        } else if (keyPressed.contains(KeyCode.NUMPAD5)) {
+            if (slider2Y - sliderSpeed < 631) {
+                slider2Y += sliderSpeed;
+            }
+            slider2.setY(slider2Y);
+        } else if (keyPressed.contains(KeyCode.SPACE)) {
+            instruction.setOpacity(0);
+            instruction3.setOpacity(0);
+        }
     }
 
     public void reset(Circle ball, Rectangle slider1, Rectangle slider2) {
