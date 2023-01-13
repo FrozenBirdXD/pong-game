@@ -95,9 +95,6 @@ public class Pong extends Application {
         Text instruction = new Text(384, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
         instruction.setFont(Font.font("Veranda", 14));
 
-        Text instruction2 = new Text(501, 550, "Game starts in 5 seconds!");
-        instruction2.setFont(Font.font("Veranda", 18));
-
         Text instruction3 = new Text(482, 505, "Press Spacebar to remove instructions");
         instruction3.setFont(Font.font("Veranda", 14));
         
@@ -121,7 +118,7 @@ public class Pong extends Application {
         
 
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner, instruction, instruction2, instruction3);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner, instruction, instruction3);
 
         // stage configs
         stage.setScene(scene);
@@ -167,7 +164,6 @@ public class Pong extends Application {
                             break;
                         case SPACE:
                             instruction.setOpacity(0);
-                            instruction2.setOpacity(0);
                             instruction3.setOpacity(0);
                         default:
                             break;
@@ -181,11 +177,14 @@ public class Pong extends Application {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
 
         AnimationTimer ballMovement = new AnimationTimer() {
+            private long prevTime = 0;
 
             @Override
             public void handle(long now) {
-                if (!paused) {
-                
+                long dt = now - prevTime;
+                if (!paused && dt > 3e7) {
+                    prevTime = now;
+
                     // ball collision detection with slider 1
                     if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
                         velocityX =- velocityX;
