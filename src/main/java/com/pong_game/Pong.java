@@ -34,6 +34,7 @@ public class Pong extends Application {
     public int scorePlayer1 = 0;
     public int scorePlayer2 = 0;
     public boolean paused = false;
+    public boolean aPlayerWon = false;
 
     public static void main(String[] args) {
         // launches start method
@@ -43,25 +44,14 @@ public class Pong extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try {
-        
+
         // creates root node and scene 
         AnchorPane root = new AnchorPane();
         Scene scene = new Scene(root, Color.LIGHTGRAY);
 
-        // adds icon.png as the icon
+        // adds pongIcon.png as the icon
         Image icon = new Image("pongIcon.png");
         stage.getIcons().add(icon);
-        
-        // creates start button
-        /* Button startButton = new Button("start game");
-        startButton.setDefaultButton(true);
-        startButton.setLayoutX(554);
-        startButton.setLayoutY(306);
-        startButton.setPrefHeight(34); 
-        startButton.setPrefWidth(90);
-        startButton.setFont(Font.font("Veranda", 14)); */
-
-        // create event handling for start button
 
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
@@ -98,7 +88,6 @@ public class Pong extends Application {
         Text instruction3 = new Text(482, 505, "Press Spacebar to remove instructions");
         instruction3.setFont(Font.font("Veranda", 14));
         
-
         // creates scoreboard
         Text scorePlayer1 = new Text(485, 98, "0");
         scorePlayer1.setFont(Font.font("Veranda", 60));
@@ -116,7 +105,6 @@ public class Pong extends Application {
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
         
-
         // adds all the node to the AnchorPane
         root.getChildren().addAll(ball, slider1, slider2, scorePlayer1, scorePlayer2, colon, winner, instruction, instruction3);
 
@@ -129,7 +117,7 @@ public class Pong extends Application {
         stage.show();
 
         EventHandler event = new EventHandler<KeyEvent>() {
-        
+
             @Override
             public void handle(KeyEvent key) {
                 if (key.getCode() == KeyCode.P) {
@@ -173,52 +161,27 @@ public class Pong extends Application {
         };
 
         // key event handler
-        
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event); 
 
+        // ball movement, ball detection and main game mechanics
         AnimationTimer ballMovement = new AnimationTimer() {
             private long prevTime = 0;
 
             @Override
             public void handle(long now) {
                 long dt = now - prevTime;
+
+                // checks if the game is not paused and if the time difference from the animation update is bigger that the given value
                 if (!paused && dt > 3e7) {
                     prevTime = now;
 
                     ballCollision(ball, slider1, slider2);
-                    
-                    // reset game when and update scores when point is scored
-                    if (ballCenterX - ball.getRadius() <= 0) {
-                        Pong.this.scorePlayer2 += 1;
-                        String scoreR1 = String.valueOf(Pong.this.scorePlayer2);
-                        scorePlayer2.setText(scoreR1);
-                        reset();
-                        slider1.setY(slider1Y);
-                        slider2.setY(slider2Y);
-                        ball.setCenterX(ballCenterX);
+                    scorePoint(ball, slider1, slider2, scorePlayer2, scorePlayer1);
+                    ifPlayerWins(winner);
+                    if (aPlayerWon) {
+                        stop();
                     }
-
-                    if (ballCenterX + ball.getRadius() >= 1200) {
-                        Pong.this.scorePlayer1 += 1;
-                        String scoreR1 = String.valueOf(Pong.this.scorePlayer1);
-                        scorePlayer1.setText(scoreR1);
-                        reset();
-                        slider1.setY(slider1Y);
-                        slider2.setY(slider2Y);
-                        ball.setCenterX(ballCenterX);
-                    }
-                    
                     updateBallPosition(ball);
-
-                    if (wins(Pong.this.scorePlayer1)) {
-                        winner.setText("Player 1 WINS!");
-                        stop();
-                    }
-
-                    if (wins(Pong.this.scorePlayer2)) {
-                        winner.setText("Player 2 WINS!");
-                        stop();
-                    }
                 }
             }
         };
@@ -230,17 +193,45 @@ public class Pong extends Application {
         }   
     }
 
-    public void reset() {
+    public void reset(Circle ball, Rectangle slider1, Rectangle slider2) {
         slider1Y = 330;
         slider2Y = 330;
         ballCenterX = 600;
+
+        slider1.setY(slider1Y);
+        slider2.setY(slider2Y);
+        ball.setCenterX(ballCenterX);
         
     }
 
-    public boolean wins(int score) {
-        return score == 5;
+    public void ifPlayerWins(Text winner) {
+        if (Pong.this.scorePlayer1 == 5) {
+            winner.setText("Player 1 WINS!");
+            aPlayerWon = true;
+        }
+
+        if (Pong.this.scorePlayer2 == 5) {
+            winner.setText("Player 2 WINS!");
+            aPlayerWon = true;
+        }
     }
 
+    // checks if the ball scored a point and resets the game
+    public void scorePoint(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer2, Text scorePlayer1) {
+        if (ballCenterX - ball.getRadius() <= 0) {
+            Pong.this.scorePlayer2 += 1;
+            String scoreR1 = String.valueOf(Pong.this.scorePlayer2);
+            scorePlayer2.setText(scoreR1);
+            reset(ball, slider1, slider2);
+        }
+
+        if (ballCenterX + ball.getRadius() >= 1200) {
+            Pong.this.scorePlayer1 += 1;
+            String scoreR1 = String.valueOf(Pong.this.scorePlayer1);
+            scorePlayer1.setText(scoreR1);
+            reset(ball, slider1, slider2);
+        }
+    }
 
     public void updateBallPosition(Circle ball) {
         ball.setCenterX(ballCenterX += velocityX);
