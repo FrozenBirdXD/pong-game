@@ -23,7 +23,7 @@ public class Controller {
     public int slider1Y = 330;
     public int slider2Y = 330;
     public int sliderSpeed = 10;
-    public boolean paused = false;
+    public boolean paused = true;
     public boolean aPlayerWon = false;
     
     public Circle ball;
@@ -33,10 +33,9 @@ public class Controller {
     public Text scorePlayer2Text;
     public Text winner;
     public Set keyPressed;
-    public Text instruction;
-    public Text instruction3;
+    public Text instructions;
     
-    public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instruction, Text instruction3) {
+    public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instructions) {
         this.ball = ball;
         this.slider1 = slider1;
         this.slider2 = slider2;
@@ -44,9 +43,9 @@ public class Controller {
         this.scorePlayer2Text = scorePlayer2Text;
         this.winner = winner;
         this.keyPressed = keyPressed;
-        this.instruction = instruction;
-        this.instruction3 = instruction3;
+        this.instructions = instructions;
     }
+
     public void gameTicks() {
         // main game mechanics
         AnimationTimer gameTicks = new AnimationTimer() {
@@ -59,11 +58,13 @@ public class Controller {
                 // checks if the game is not paused and if the time difference from the animation update is bigger that the given value
                 if (!paused && dt > 3e7) {
                     prevTime = now;
-                    keyboardInput(keyPressed, slider1, slider2, instruction, instruction3);
+                    keyboardInput(keyPressed, slider1, slider2, instructions);
                     ballCollision(ball, slider1, slider2);
                     scorePoint(ball, slider1, slider2, scorePlayer2Text, scorePlayer1Text);
                     ifPlayerWins(winner);
                     if (aPlayerWon) {
+                        // long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+                        // System.out.println(afterUsedMem);
                         stop();
                     }
                     updateBallPosition(ball);
@@ -135,7 +136,7 @@ public class Controller {
         }
     }
     
-    public void keyboardInput(Set keyPressed, Rectangle slider1, Rectangle slider2, Text instruction, Text instruction3) {
+    public void keyboardInput(Set keyPressed, Rectangle slider1, Rectangle slider2, Text instructions) {
         if (keyPressed.contains(KeyCode.W)) {
             if (slider1Y - sliderSpeed > -20) {
                 slider1Y -= sliderSpeed;
@@ -157,8 +158,7 @@ public class Controller {
             }
             slider2.setY(slider2Y);
         } else if (keyPressed.contains(KeyCode.SPACE)) {
-            instruction.setOpacity(0);
-            instruction3.setOpacity(0);
+            instructions.setOpacity(0);
         }
     }
     

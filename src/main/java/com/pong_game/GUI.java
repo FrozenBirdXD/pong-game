@@ -22,10 +22,12 @@ import javafx.stage.Stage;
 
 public class GUI extends Application {
 
-    public boolean paused = false;
+    public boolean paused = true;
 
     public static void main(String[] args) {
         // launches start method
+        // long beforeUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+        // System.out.println(beforeUsedMem);
         launch(args);  
     }
 
@@ -41,13 +43,10 @@ public class GUI extends Application {
         Image icon = new Image("pongIcon.png");
         stage.getIcons().add(icon);
 
-        // creates a random interger between 50 and 750
-        Random rand = new Random();
-        int randomY = rand.nextInt(700) + 50;
-
         // creates a ball node
         // constructor: CenterX, CenterY, Radius, Color
-        Circle ball = new Circle(600, randomY, 20, Color.rgb(212, 130, 47));
+        Circle ball = new Circle(600, 350, 20, Color.rgb(212, 130, 47));
+        ball.setOpacity(0);
         
         // creates slider1 node (left)
         // constructor: LeftCornerX, LeftCornerY, Width, Height
@@ -74,11 +73,8 @@ public class GUI extends Application {
 
         // creates (temporary) instructions
         // constructor: OriginX, OriginY, "Text"
-        Text instruction = new Text(384, 486, "use 'w' and 's' for player 1 use 'numpad 8' and 'numpad 5' for player 2");
-        instruction.setFont(Font.font("Veranda", 14));
-
-        Text instruction3 = new Text(482, 505, "Press Spacebar to remove instructions");
-        instruction3.setFont(Font.font("Veranda", 14));
+        Text instructions = new Text(524, 415, "     Instructions:\nP:                          Pause the game\nW/S:                     Move slider1\nnum8/num5:        Move slider2\n\n=> Press P to start the game!");
+        instructions.setFont(Font.font("Veranda", 14));
         
         // creates scoreboard
         Text scorePlayer1Text = new Text(485, 98, "0");
@@ -98,7 +94,7 @@ public class GUI extends Application {
         colon.setOpacity(0.7);
         
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instruction, instruction3);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions);
 
         // stage configs
         stage.setScene(scene);
@@ -112,7 +108,7 @@ public class GUI extends Application {
         Set<KeyCode> keyPressed = new HashSet<KeyCode>();
 
         // creates controller object
-        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instruction, instruction3);
+        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions);
         
         // calls the main gameticks method on the controller
         controller.gameTicks();
@@ -125,6 +121,8 @@ public class GUI extends Application {
                 if (key.getCode().equals(KeyCode.P)) {
                     paused = !paused;
                     controller.setPaused(paused);
+                    instructions.setOpacity(0);
+                    ball.setOpacity(1);
                 } else {
                     keyPressed.add(key.getCode());
                 }
