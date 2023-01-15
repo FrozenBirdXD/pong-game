@@ -5,8 +5,6 @@ import java.util.Set;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -16,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -101,25 +98,14 @@ public class GUI extends Application {
         settings.setLayoutX(10);    
         settings.setLayoutY(5);
         settings.setOnAction(event -> {
-            System.out.println("nice");
+            // active settings menu
         });
-
         // creates an image with the settings gear
         Image settingsIcon = new Image("settingsIcon.png");
 
         // adds the settings gear as the icon for the settings button
         ImageButton sett = new ImageButton(settingsIcon, 25, 25, settings);
 
-        // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings);
-
-        // stage configs
-        stage.setScene(scene);
-        stage.setTitle("Pong");
-        stage.setResizable(false);
-        stage.setWidth(1210);
-        stage.setHeight(800);
-        stage.show();
 
         // create a set that stores all of the keys that are pressed at any moment
         Set<KeyCode> keyPressed = new HashSet<KeyCode>();
@@ -130,7 +116,35 @@ public class GUI extends Application {
         // calls the main gameticks method on the controller
         controller.startGame();
 
-        // add an event handler to the scene to listen for keys pressed
+
+        // adds a pause button
+        Button pause = new Button("");
+        pause.setLayoutX(40);   
+        pause.setLayoutY(-7);
+        pause.setOnAction(event -> {
+            paused = !paused;
+            controller.setPaused(paused);
+            instructions.setOpacity(0);
+            ball.setOpacity(1);
+        });
+        // creates an image with the pause icon
+        Image pauseIcon = new Image("pauseIcon.png");
+
+        // adds the pause icon as the icon for the button
+        ImageButton pau = new ImageButton(pauseIcon, 50, 50, pause);
+
+        // adds all the node to the AnchorPane
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause);
+
+        // stage configs
+        stage.setScene(scene);
+        stage.setTitle("Pong");
+        stage.setResizable(false);
+        stage.setWidth(1210);
+        stage.setHeight(800);
+        stage.show();
+
+        // adds an event handler to the scene to listen for keys pressed
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent key) {
@@ -146,7 +160,7 @@ public class GUI extends Application {
             }
         });
 
-        // add an event handler to the scene to listen for keys released
+        // adds an event handler to the scene to listen for keys released
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent key) {
@@ -154,7 +168,7 @@ public class GUI extends Application {
             }
         });   
 
-        // add an event filter so that space and enter don't active the settings button
+        // adds an event filter so that space and enter don't active the settings button
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.SPACE)) {
                 event.consume();

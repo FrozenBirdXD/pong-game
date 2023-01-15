@@ -157,8 +157,8 @@ public class Controller extends GUI{
                 slider2Y += sliderSpeed;
             }
             slider2.setY(slider2Y);
-        } else if (keyPressed.contains(KeyCode.SPACE)) {
-            instructions.setOpacity(0);
+        } else if (keyPressed.contains(KeyCode.ESCAPE)) {
+            // goes to setting menu
         }
     }
     
