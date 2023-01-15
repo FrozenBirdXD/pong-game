@@ -93,29 +93,40 @@ public class GUI extends Application {
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
 
+        // create a set that stores all of the keys that are pressed at any moment
+        Set<KeyCode> keyPressed = new HashSet<KeyCode>();
+
+        // creates controller object and starts the game
+        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions);
+        controller.startGame();
+
+        // adds the settings menu
+        SettingsMenu settingsMenu = new SettingsMenu();
+
         // adds a settings button
         Button settings = new Button("");
         settings.setLayoutX(10);    
         settings.setLayoutY(5);
         settings.setOnAction(event -> {
-            // active settings menu
+            paused = true;
+            controller.setPaused(paused);
+            stage.setScene(settingsMenu.createSettingsMenu(scene, stage));
+            stage.show();
         });
+
         // creates an image with the settings gear
         Image settingsIcon = new Image("settingsIcon.png");
 
         // adds the settings gear as the icon for the settings button
         ImageButton sett = new ImageButton(settingsIcon, 25, 25, settings);
 
-
-        // create a set that stores all of the keys that are pressed at any moment
-        Set<KeyCode> keyPressed = new HashSet<KeyCode>();
-
-        // creates controller object
-        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions);
-        
-        // calls the main gameticks method on the controller
-        controller.startGame();
-
+        // future me problem - new game button
+        /* Button newGame = new Button("New Game");
+        newGame.setLayoutX(70);
+        newGame.setLayoutY(70);
+        newGame.setOnAction(event -> {
+            controller.newGame();
+        }); */
 
         // adds a pause button
         Button pause = new Button("");

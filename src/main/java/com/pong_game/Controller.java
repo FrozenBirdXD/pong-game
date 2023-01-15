@@ -23,6 +23,7 @@ public class Controller extends GUI{
     public int slider1Y = 330;
     public int slider2Y = 330;
     public int sliderSpeed = 10;
+    public int playUntil = 1;
     public boolean aPlayerWon = false;
     
     public Circle ball;
@@ -57,11 +58,11 @@ public class Controller extends GUI{
                 // checks if the game is not paused and if the time difference from the animation update is bigger that the given value
                 if (!paused && dt > 3e7) {
                     prevTime = now;
-                    keyboardInput(keyPressed, slider1, slider2, instructions);
-                    ballCollision(ball, slider1, slider2);
-                    scorePoint(ball, slider1, slider2, scorePlayer2Text, scorePlayer1Text);
-                    updateBallPosition(ball);
-                    ifPlayerWins(winner);
+                    keyboardInput();
+                    ballCollision();
+                    scorePoint();
+                    updateBallPosition();
+                    ifPlayerWins();
                     if (aPlayerWon) {
                         // long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
                         // System.out.println(afterUsedMem);
@@ -75,7 +76,7 @@ public class Controller extends GUI{
         gameTicks.start();
     }
     
-    public void ballCollision(Circle ball, Rectangle slider1, Rectangle slider2) {
+    public void ballCollision() {
         // ball collision detection with slider 1
         if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
             velocityX =- velocityX;
@@ -92,29 +93,29 @@ public class Controller extends GUI{
         }
     }
     
-    public void updateBallPosition(Circle ball) {
+    public void updateBallPosition() {
         ball.setCenterX(ballCenterX += velocityX);
         ball.setCenterY(ballCenterY += velocityY);
     }
     
     // checks if the ball scored a point and resets the game
-    public void scorePoint(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer2Text, Text scorePlayer1Text) {
+    public void scorePoint() {
         if (ballCenterX - ball.getRadius() <= 0) {
             this.scorePlayer2 += 1;
             String scoreR1 = String.valueOf(this.scorePlayer2);
             scorePlayer2Text.setText(scoreR1);
-            reset(ball, slider1, slider2);
+            reset();
         }
         
         if (ballCenterX + ball.getRadius() >= 1200) {
             this.scorePlayer1 += 1;
             String scoreR1 = String.valueOf(this.scorePlayer1);
             scorePlayer1Text.setText(scoreR1);
-            reset(ball, slider1, slider2);
+            reset();
         }
     }
     
-    public void reset(Circle ball, Rectangle slider1, Rectangle slider2) {
+    public void reset() {
         slider1Y = 330;
         slider2Y = 330;
         ballCenterX = 600;
@@ -124,19 +125,19 @@ public class Controller extends GUI{
         ball.setCenterX(ballCenterX);
     }
     
-    public void ifPlayerWins(Text winner) {
-        if (this.scorePlayer1 == 5) {
+    public void ifPlayerWins() {
+        if (this.scorePlayer1 == playUntil) {
             winner.setText("Player 1 WINS!");
             aPlayerWon = true;
         }
         
-        if (this.scorePlayer2 == 5) {
+        if (this.scorePlayer2 == playUntil) {
             winner.setText("Player 2 WINS!");
             aPlayerWon = true;
         }
     }
     
-    public void keyboardInput(Set keyPressed, Rectangle slider1, Rectangle slider2, Text instructions) {
+    public void keyboardInput() {
         if (keyPressed.contains(KeyCode.W)) {
             if (slider1Y - sliderSpeed > -20) {
                 slider1Y -= sliderSpeed;
@@ -165,4 +166,18 @@ public class Controller extends GUI{
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
+
+    // future me problem
+    /* public void newGame() {
+        winner.setOpacity(0);
+        this.scorePlayer1 = 0;
+        this.scorePlayer2 = 0;
+        String scoreR1 = String.valueOf(this.scorePlayer1);
+        String scoreR2 = String.valueOf(this.scorePlayer2);
+        scorePlayer1Text.setText(scoreR1);
+        scorePlayer2Text.setText(scoreR2);
+        aPlayerWon = false;
+        ball.setOpacity(1);
+        startGame();
+    } */
 }
