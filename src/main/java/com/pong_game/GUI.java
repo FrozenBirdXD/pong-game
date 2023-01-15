@@ -1,12 +1,14 @@
 package com.pong_game;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -14,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -92,9 +95,23 @@ public class GUI extends Application {
         Text colon = new Text(592, 98, ":");
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
-        
+
+        // adds a settings button
+        Button settings = new Button("");
+        settings.setLayoutX(10);    
+        settings.setLayoutY(5);
+        settings.setOnAction(event -> {
+            System.out.println("nice");
+        });
+
+        // creates an image with the settings gear
+        Image settingsIcon = new Image("settingsIcon.png");
+
+        // adds the settings gear as the icon for the settings button
+        ImageButton sett = new ImageButton(settingsIcon, 25, 25, settings);
+
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings);
 
         // stage configs
         stage.setScene(scene);
@@ -111,7 +128,7 @@ public class GUI extends Application {
         Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions);
         
         // calls the main gameticks method on the controller
-        controller.gameTicks();
+        controller.startGame();
 
         // add an event handler to the scene to listen for keys pressed
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -136,6 +153,13 @@ public class GUI extends Application {
                 keyPressed.remove(key.getCode());
             }
         });   
+
+        // add an event filter so that space and enter don't active the settings button
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.SPACE)) {
+                event.consume();
+            }
+        });
         
         } catch (Exception e) {
             System.out.println(e);

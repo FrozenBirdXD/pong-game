@@ -9,13 +9,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class Controller {
+public class Controller extends GUI{
     
     Random rand = new Random();
     int randomY = rand.nextInt(700) + 50;
     
-    public int velocityX = 6;
-    public int velocityY = 6;
+    public int velocityX = 8;
+    public int velocityY = 8;
     public int ballCenterX = 600;
     public int ballCenterY = randomY;
     public int scorePlayer1 = 0;
@@ -23,7 +23,6 @@ public class Controller {
     public int slider1Y = 330;
     public int slider2Y = 330;
     public int sliderSpeed = 10;
-    public boolean paused = true;
     public boolean aPlayerWon = false;
     
     public Circle ball;
@@ -46,7 +45,7 @@ public class Controller {
         this.instructions = instructions;
     }
 
-    public void gameTicks() {
+    public void startGame() {
         // main game mechanics
         AnimationTimer gameTicks = new AnimationTimer() {
             private long prevTime = 0;
@@ -61,13 +60,14 @@ public class Controller {
                     keyboardInput(keyPressed, slider1, slider2, instructions);
                     ballCollision(ball, slider1, slider2);
                     scorePoint(ball, slider1, slider2, scorePlayer2Text, scorePlayer1Text);
+                    updateBallPosition(ball);
                     ifPlayerWins(winner);
                     if (aPlayerWon) {
                         // long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
                         // System.out.println(afterUsedMem);
+                        ball.setOpacity(0);
                         stop();
                     }
-                    updateBallPosition(ball);
                 }
             }
         };
