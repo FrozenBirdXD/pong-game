@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Set;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -34,8 +35,9 @@ public class Controller extends GUI{
     public Text winner;
     public Set keyPressed;
     public Text instructions;
+    public Button restartButton;
     
-    public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instructions) {
+    public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instructions, Button restartButton) {
         this.ball = ball;
         this.slider1 = slider1;
         this.slider2 = slider2;
@@ -44,6 +46,7 @@ public class Controller extends GUI{
         this.winner = winner;
         this.keyPressed = keyPressed;
         this.instructions = instructions;
+        this.restartButton = restartButton;
     }
 
     public void startGame() {
@@ -129,11 +132,13 @@ public class Controller extends GUI{
         if (this.scorePlayer1 == playUntil) {
             winner.setText("Player 1 WINS!");
             aPlayerWon = true;
+            restartButton.setVisible(true);
         }
         
         if (this.scorePlayer2 == playUntil) {
             winner.setText("Player 2 WINS!");
             aPlayerWon = true;
+            restartButton.setVisible(true);
         }
     }
     
@@ -168,7 +173,7 @@ public class Controller extends GUI{
     }
 
     // future me problem
-    /* public void newGame() {
+    public void restartButton() {
         winner.setOpacity(0);
         this.scorePlayer1 = 0;
         this.scorePlayer2 = 0;
@@ -178,6 +183,7 @@ public class Controller extends GUI{
         scorePlayer2Text.setText(scoreR2);
         aPlayerWon = false;
         ball.setOpacity(1);
+        restartButton.setVisible(false);
         startGame();
-    } */
+    }
 }

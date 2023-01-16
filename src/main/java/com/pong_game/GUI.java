@@ -93,12 +93,22 @@ public class GUI extends Application {
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
 
+        // future me problem - new game button
+        Button restartButton = new Button("New Game");
+        restartButton.setFont(Font.font("Veranda", 18));
+        restartButton.setLayoutX(544);
+        restartButton.setLayoutY(387);
+        restartButton.setVisible(false);
         // create a set that stores all of the keys that are pressed at any moment
         Set<KeyCode> keyPressed = new HashSet<KeyCode>();
 
         // creates controller object and starts the game
-        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions);
+        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions, restartButton);
         controller.startGame();
+
+        restartButton.setOnAction(event -> {
+            controller.restartButton();
+        });
 
         // adds the settings menu
         SettingsMenu settingsMenu = new SettingsMenu();
@@ -120,13 +130,7 @@ public class GUI extends Application {
         // adds the settings gear as the icon for the settings button
         ImageButton sett = new ImageButton(settingsIcon, 25, 25, settings);
 
-        // future me problem - new game button
-        /* Button newGame = new Button("New Game");
-        newGame.setLayoutX(70);
-        newGame.setLayoutY(70);
-        newGame.setOnAction(event -> {
-            controller.newGame();
-        }); */
+        
 
         // adds a pause button
         Button pause = new Button("");
@@ -145,7 +149,7 @@ public class GUI extends Application {
         ImageButton pau = new ImageButton(pauseIcon, 50, 50, pause);
 
         // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause);
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause, restartButton);
 
         // stage configs
         stage.setScene(scene);
