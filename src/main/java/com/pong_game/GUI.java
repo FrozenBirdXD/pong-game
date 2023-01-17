@@ -99,7 +99,8 @@ public class GUI extends Application {
         restartButton.setLayoutX(544);
         restartButton.setLayoutY(387);
         restartButton.setVisible(false);
-        // create a set that stores all of the keys that are pressed at any moment
+
+        // create a set that stores all of the keys that are pressed at any moment (thread-safe collection and cannot contain duplicates)
         Set<KeyCode> keyPressed = new HashSet<KeyCode>();
 
         // creates controller object and starts the game
