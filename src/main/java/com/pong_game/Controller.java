@@ -39,7 +39,7 @@ public class Controller extends GUI{
     public Set keyPressed;
     public Text instructions;
     public Button restartButton;
-    
+
     public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instructions, Button restartButton) {
         this.ball = ball;
         this.slider1 = slider1;
@@ -56,7 +56,8 @@ public class Controller extends GUI{
     public void startGame() {
         // starts the seperate Threads for the movement of the sliders
         moveSlider1();
-        moveSlider2();
+        moveSlider2();   
+
         AnimationTimer gameTicks = new AnimationTimer() {
             private long prevTime = 0;
             
@@ -156,15 +157,20 @@ public class Controller extends GUI{
     public void moveSlider1() {
         // creates a new Thread for the movement of slider1
         Thread slider1Thread = new Thread(() -> {
-            // while the game is running
             while (running) {
-                // checks which keys are currently pressed
+                while(paused) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (keyPressed.contains(KeyCode.W) && slider1Y - sliderSpeed > -20) {
                     slider1Y -= sliderSpeed;
                 } else if (keyPressed.contains(KeyCode.S) && slider1Y + sliderSpeed < 631) {
                     slider1Y += sliderSpeed;
                 }
-                Platform.runLater(() -> slider1.setY(slider1Y));    // update the sliders position in the main JavaFX Application thread
+                Platform.runLater(() -> slider1.setY(slider1Y));
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -178,15 +184,20 @@ public class Controller extends GUI{
     public void moveSlider2() {
         // creates a new Thread for the movement of slider2
         Thread slider2Thread = new Thread(() -> {
-            // while the game is running
-            while (running) {   
-                // checks which keys are currently pressed
+            while (running) {
+                while(paused) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (keyPressed.contains(KeyCode.NUMPAD8) && slider2Y - sliderSpeed > -20) {
                     slider2Y -= sliderSpeed;
                 } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + sliderSpeed < 631) {
                     slider2Y += sliderSpeed;
                 }
-                Platform.runLater(() -> slider2.setY(slider2Y));    // update the sliders position in the main JavaFX Application thread
+                Platform.runLater(() -> slider2.setY(slider2Y));
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -216,4 +227,5 @@ public class Controller extends GUI{
         restartButton.setVisible(false);
         startGame();
     }
+
 }

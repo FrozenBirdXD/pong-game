@@ -62,15 +62,15 @@ public class GUI extends Application {
         Button restartButton = createRestartButton();
         this.settingsMenu = new SettingsMenu();
 
+        configsStage();
+        sceneHandlers();
+
         // create a set that stores all of the keys that are pressed at any moment (thread-safe collection and cannot contain duplicates)
         this.keyPressed = new HashSet<KeyCode>();
 
         // creates controller object and starts the game
         this.controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions, restartButton);
         controller.startGame();
-
-        configsStage();
-        sceneHandlers();
 
         // adds all the node to the AnchorPane
         root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause, restartButton);
