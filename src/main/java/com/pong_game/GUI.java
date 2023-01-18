@@ -24,31 +24,63 @@ public class GUI extends Application {
 
     public boolean paused = true;
 
+    public Controller controller;
+    public SettingsMenu settingsMenu;
+    public Stage stage;
+    public Scene scene;
+    public Circle ball;
+    public Text instructions;
+    public Set<KeyCode> keyPressed;
+
     public static void main(String[] args) {
-        // launches start method
         // long beforeUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
         // System.out.println(beforeUsedMem);
-        launch(args);  
+        launch(args);   // launches start method
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         try {
-
         // creates root node and scene 
         AnchorPane root = new AnchorPane();
-        Scene scene = new Scene(root, Color.LIGHTGRAY);
+        this.scene = new Scene(root, Color.LIGHTGRAY);
 
-        // adds pongIcon.png as the icon
-        Image icon = new Image("pongIcon.png");
-        stage.getIcons().add(icon);
+        this.stage = stage;
+        this.ball = createBall();
+        this.instructions = createInstructions();
 
-        // creates a ball node
-        // constructor: CenterX, CenterY, Radius, Color
-        Circle ball = new Circle(600, 350, 20, Color.rgb(212, 130, 47));
-        ball.setOpacity(0);
+        Rectangle slider1 = createSlider1();
+        Rectangle slider2 = createSlider2();
         
-        // creates slider1 node (left)
+        Text scorePlayer1Text = createScorePlayer1Text();
+        Text scorePlayer2Text = createScorePlayer2Text();
+        Text winner = createWinnerText();
+        Text colon = createColon();
+
+        Button settings = createSettingsButton();
+        Button pause = createPauseButton();
+        Button restartButton = createRestartButton();
+        this.settingsMenu = new SettingsMenu();
+
+        // create a set that stores all of the keys that are pressed at any moment (thread-safe collection and cannot contain duplicates)
+        this.keyPressed = new HashSet<KeyCode>();
+
+        // creates controller object and starts the game
+        this.controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions, restartButton);
+        controller.startGame();
+
+        configsStage();
+        sceneHandlers();
+
+        // adds all the node to the AnchorPane
+        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause, restartButton);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public Rectangle createSlider1() {
         // constructor: LeftCornerX, LeftCornerY, Width, Height
         Rectangle slider1 = new Rectangle(50, 330, 20, 140);
         slider1.setArcHeight(5.0);
@@ -56,8 +88,10 @@ public class GUI extends Application {
         slider1.setFill(Color.rgb(127, 144, 255));
         slider1.setStroke(Color.BLACK);
         slider1.setStrokeType(StrokeType.INSIDE);
-        
-        // creates slider2 node (right)
+        return slider1;
+    }
+
+    public Rectangle createSlider2() {
         // constructor: LeftCornerX, LeftCornerY, Width, Height
         Rectangle slider2 = new Rectangle(1130, 330, 20, 140);
         slider2.setArcHeight(5.0);
@@ -65,55 +99,40 @@ public class GUI extends Application {
         slider2.setFill(Color.rgb(127, 144, 255));
         slider2.setStroke(Color.BLACK);
         slider2.setStrokeType(StrokeType.INSIDE);
+        return slider2;
+    }
 
-        // creates winning text
-        Text winner = new Text(480, 486, "");
-        winner.setTextAlignment(TextAlignment.CENTER);  
-        winner.setFont(Font.font("Veranda", 40));
-
-        // creates (temporary) instructions
-        // constructor: OriginX, OriginY, "Text"
-        Text instructions = new Text(524, 415, "     Instructions:\nP:                          Pause the game\nW/S:                     Move slider1\nnum8/num5:        Move slider2\n\n=> Press P to start the game!");
-        instructions.setFont(Font.font("Veranda", 14));
-        
-        // creates scoreboard
+    public Text createScorePlayer1Text() {
         Text scorePlayer1Text = new Text(485, 98, "0");
         scorePlayer1Text.setFont(Font.font("Veranda", 60));
         scorePlayer1Text.setTextAlignment(TextAlignment.CENTER);
         scorePlayer1Text.setWrappingWidth(158.9366455078125);
         scorePlayer1Text.setOpacity(0.7);
+        return scorePlayer1Text;
+    }
 
+    public Text createScorePlayer2Text() {
         Text scorePlayer2Text = new Text(554, 98, "0");
         scorePlayer2Text.setFont(Font.font("Veranda", 60));
         scorePlayer2Text.setTextAlignment(TextAlignment.CENTER);
         scorePlayer2Text.setWrappingWidth(158.9366455078125);
         scorePlayer2Text.setOpacity(0.7);
+        return scorePlayer2Text;
+    }
 
-        Text colon = new Text(592, 98, ":");
-        colon.setFont(Font.font("Veranda", 60));
-        colon.setOpacity(0.7);
-
-        // future me problem - new game button
+    public Button createRestartButton() {
         Button restartButton = new Button("New Game");
         restartButton.setFont(Font.font("Veranda", 18));
         restartButton.setLayoutX(544);
         restartButton.setLayoutY(387);
         restartButton.setVisible(false);
-
-        // create a set that stores all of the keys that are pressed at any moment (thread-safe collection and cannot contain duplicates)
-        Set<KeyCode> keyPressed = new HashSet<KeyCode>();
-
-        // creates controller object and starts the game
-        Controller controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions, restartButton);
-        controller.startGame();
-
         restartButton.setOnAction(event -> {
             controller.restartButton();
         });
+        return restartButton;
+    }
 
-        // adds the settings menu
-        SettingsMenu settingsMenu = new SettingsMenu();
-
+    public Button createSettingsButton() {
         // adds a settings button
         Button settings = new Button("");
         settings.setLayoutX(10);    
@@ -125,14 +144,25 @@ public class GUI extends Application {
             stage.show();
         });
 
-        // creates an image with the settings gear
+        // adds the settingsgear as the button icon
         Image settingsIcon = new Image("settingsIcon.png");
+        new ImageButton(settingsIcon, 25, 25, settings);
+        return settings;
+    }
 
-        // adds the settings gear as the icon for the settings button
-        ImageButton sett = new ImageButton(settingsIcon, 25, 25, settings);
+    public void configsStage() {
+        stage.setScene(scene);
+        stage.setTitle("Pong");
+        stage.setResizable(false);
+        stage.setWidth(1210);
+        stage.setHeight(800);
+        stage.show();
 
-        
+        Image icon = new Image("pongIcon.png");
+        stage.getIcons().add(icon);
+    }
 
+    public Button createPauseButton() {
         // adds a pause button
         Button pause = new Button("");
         pause.setLayoutX(40);   
@@ -143,23 +173,28 @@ public class GUI extends Application {
             instructions.setOpacity(0);
             ball.setOpacity(1);
         });
-        // creates an image with the pause icon
+
+        // sets the pauseIcon as the icon for the pause button
         Image pauseIcon = new Image("pauseIcon.png");
+        new ImageButton(pauseIcon, 50, 50, pause);
+        return pause;
+    }
 
-        // adds the pause icon as the icon for the button
-        ImageButton pau = new ImageButton(pauseIcon, 50, 50, pause);
+    public Circle createBall() {
+        // constructor: CenterX, CenterY, Radius, Color
+        Circle ball = new Circle(600, 350, 20, Color.rgb(212, 130, 47));
+        ball.setOpacity(0);
+        return ball;
+    }
 
-        // adds all the node to the AnchorPane
-        root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause, restartButton);
+    public Text createInstructions() {
+        // constructor: OriginX, OriginY, "Text"
+        Text instructions = new Text(524, 415, "     Instructions:\nP:                          Pause the game\nW/S:                     Move slider1\nnum8/num5:        Move slider2\n\n=> Press P to start the game!");
+        instructions.setFont(Font.font("Veranda", 14));
+        return instructions;
+    }
 
-        // stage configs
-        stage.setScene(scene);
-        stage.setTitle("Pong");
-        stage.setResizable(false);
-        stage.setWidth(1210);
-        stage.setHeight(800);
-        stage.show();
-
+    public void sceneHandlers() {
         // adds an event handler to the scene to listen for keys pressed
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -190,9 +225,19 @@ public class GUI extends Application {
                 event.consume();
             }
         });
-        
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    }
+
+    public Text createWinnerText() {
+        Text winner = new Text(480, 486, "");
+        winner.setTextAlignment(TextAlignment.CENTER);  
+        winner.setFont(Font.font("Veranda", 40));
+        return winner;
+    }
+
+    public Text createColon() {
+        Text colon = new Text(592, 98, ":");
+        colon.setFont(Font.font("Veranda", 60));
+        colon.setOpacity(0.7);
+        return colon;
     }
 }
