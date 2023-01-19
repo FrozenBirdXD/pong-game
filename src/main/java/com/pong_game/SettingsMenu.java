@@ -1,10 +1,14 @@
 package com.pong_game;
 
+import java.io.File;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -15,6 +19,7 @@ import javafx.stage.Stage;
 public class SettingsMenu extends GUI{
     
     public AnchorPane root;
+    public SaveSettings properties;
     
     public Scene createSettingsMenu(Scene scene, Stage stage) {
         AnchorPane root = new AnchorPane();
@@ -24,10 +29,35 @@ public class SettingsMenu extends GUI{
         
         createSettingsButton(scene, stage, root);
         createSaveButton();
-        createSettingsLabel(root);
+        createResetButton();
+        createSettingsLabel();
         createAllText();
-        createAllChoiceBox();
-        createAllColorPicker();
+        ChoiceBox presetDiff = createChoiceBox(539, 234, 100);
+        ColorPicker slider1Color = createColorPicker(579, 460);
+        ColorPicker slider2Color = createColorPicker(579, 486);
+        ColorPicker ballColor = createColorPicker(579, 511);
+        Slider slider1Size = createSettingsSlider(262, 465);
+        Slider slider2Size = createSettingsSlider(262, 491);
+        Slider ballSize = createSettingsSlider(262, 516);
+        Slider slider1Speed = createSettingsSlider(910, 465);
+        Slider slider2Speed = createSettingsSlider(910, 491);
+        Slider ballSpeed = createSettingsSlider(910, 516);
+        TextField playUntilInput = createTextField();
+
+        this.properties = new SaveSettings(presetDiff, slider1Color, slider2Color, ballColor, slider1Size, slider2Size, ballSize, slider1Speed, slider2Speed, ballSpeed, playUntilInput);
+        
+        File file = new File("config.properties");
+        // if the config.properties file exists but is empty, then the file will be filled with the default settings
+        if (file.exists() && file.isFile()) {
+            if (file.length() == 0) {
+                properties.setDefaultSettings();
+            }
+        // if the config.properties file does not exist one will be created with the default settings
+        } else if (!file.exists()) {
+            properties.setDefaultSettings();
+        }
+        // reads the settings from the config.properties file
+        properties.readSettings();
         
         return settingsScene;
     }
@@ -47,14 +77,7 @@ public class SettingsMenu extends GUI{
         root.getChildren().add(settings);
     }
     
-    public void createSaveButton() {
-        Button save = new Button("Save");
-        save.setLayoutX(574);
-        save.setLayoutY(655);
-        root.getChildren().add(save);
-    }
-    
-    public void createSettingsLabel(AnchorPane root) {
+    public void createSettingsLabel() {
         Label label = new Label("Settings");
         label.setLayoutX(530);
         label.setLayoutY(112);
@@ -66,6 +89,14 @@ public class SettingsMenu extends GUI{
         Text textIn = new Text(x, y, text);
         textIn.setFont(Font.font("Veranda", font));
         root.getChildren().add(textIn);
+    }
+
+    public Slider createSettingsSlider(int x, int y) {
+        Slider slider = new Slider();
+        slider.setLayoutX(x);
+        slider.setLayoutY(y);
+        root.getChildren().add(slider);
+        return slider;
     }
     
     public void createAllText() {
@@ -84,35 +115,53 @@ public class SettingsMenu extends GUI{
         createTextNode("Ball Size", 169, 527, 14);
     }
     
-    public void createChoiceBox(int x, int y, int width) {
+    public ChoiceBox createChoiceBox(int x, int y, int width) {
         ChoiceBox box = new ChoiceBox<>();
         box.setLayoutX(x);
         box.setLayoutY(y);
         box.setPrefWidth(width);
+        box.getItems().addAll("Easy", "Medium", "HARD");
         root.getChildren().add(box);
+        return box;
     }
     
-    public void createAllChoiceBox() {
-        createChoiceBox(519, 234, 150);
-        createChoiceBox(917, 460, 150);
-        createChoiceBox(917, 486, 150);
-        createChoiceBox(917, 510, 150);
-        createChoiceBox(258, 460, 150);
-        createChoiceBox(258, 485, 150);
-        createChoiceBox(258, 510, 150);
-    }
-    
-    public void createColorPicker(int x, int y) {
+    public ColorPicker createColorPicker(int x, int y) {
         ColorPicker colorPicker = new ColorPicker();
         colorPicker.setLayoutX(x);
         colorPicker.setLayoutY(y);
         root.getChildren().add(colorPicker);
+        return colorPicker;
     }
     
-    public void createAllColorPicker() {
-        createColorPicker(579, 460);
-        createColorPicker(579, 486);
-        createColorPicker(579, 511);
-        createColorPicker(579, 537);
+    public TextField createTextField() {
+        TextField field = new TextField();
+        field.setLayoutX(628);
+        field.setLayoutY(362);
+        field.setPrefHeight(26);
+        field.setPrefWidth(33);
+        root.getChildren().add(field);
+        return field;
+    }
+
+    public void createSaveButton() {
+        Button save = new Button("Save");
+        save.setLayoutX(554);
+        save.setLayoutY(655);
+        save.setOnAction(event -> {
+            properties.saveSettings();
+        });
+        root.getChildren().add(save);
+    }
+
+    // resets all of the users settings to the default settings
+    public void createResetButton() {
+        Button resetSettings = new Button("Reset");
+        resetSettings.setLayoutX(600);
+        resetSettings.setLayoutY(655);
+        resetSettings.setOnAction(event -> {
+            properties.setDefaultSettings();
+            properties.readSettings();
+        });
+        root.getChildren().add(resetSettings);
     }
 }
