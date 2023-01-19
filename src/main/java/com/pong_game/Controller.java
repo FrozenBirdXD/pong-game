@@ -157,7 +157,8 @@ public class Controller extends GUI{
     public void moveSlider1() {
         // creates a new Thread for the movement of slider1
         Thread slider1Thread = new Thread(() -> {
-            while (running) {
+            while (running) {   
+                // while the game is paused this Thread sleeps
                 while(paused) {
                     try {
                         Thread.sleep(100);
@@ -170,7 +171,7 @@ public class Controller extends GUI{
                 } else if (keyPressed.contains(KeyCode.S) && slider1Y + sliderSpeed < 631) {
                     slider1Y += sliderSpeed;
                 }
-                Platform.runLater(() -> slider1.setY(slider1Y));
+                Platform.runLater(() -> slider1.setY(slider1Y));    // sets the sliders position in the main javafx thread
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -185,6 +186,7 @@ public class Controller extends GUI{
         // creates a new Thread for the movement of slider2
         Thread slider2Thread = new Thread(() -> {
             while (running) {
+                // while the game is paused this Thread sleeps
                 while(paused) {
                     try {
                         Thread.sleep(100);
@@ -197,7 +199,7 @@ public class Controller extends GUI{
                 } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + sliderSpeed < 631) {
                     slider2Y += sliderSpeed;
                 }
-                Platform.runLater(() -> slider2.setY(slider2Y));
+                Platform.runLater(() -> slider2.setY(slider2Y));    // sets the sliders position in the main javafx thread
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
