@@ -1,5 +1,9 @@
 package com.pong_game;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 
@@ -7,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -25,7 +30,7 @@ public class Controller extends GUI{
     public int slider1Y = 330;
     public int slider2Y = 330;
     public int sliderSpeed = 10;
-    public int playUntil = 2;
+    public int playUntil = 1;
     public boolean aPlayerWon = false;
 
     public boolean running = true;
@@ -57,6 +62,9 @@ public class Controller extends GUI{
         // starts the seperate Threads for the movement of the sliders
         moveSlider1();
         moveSlider2();   
+
+        // reads the settings from the config.properties file and applies them
+        readSettings();
 
         AnimationTimer gameTicks = new AnimationTimer() {
             private long prevTime = 0;
@@ -230,4 +238,41 @@ public class Controller extends GUI{
         startGame();
     }
 
+    public void readSettings() {
+        Properties properties = new Properties();
+        InputStream input = null;
+
+        try {
+            input = new FileInputStream("config.properties");
+            // loads the config.properties file
+            properties.load(input);
+
+            // reads all of the settings and saves it to a string
+            String difficulty = properties.getProperty("difficulty");
+            String slider1Color = properties.getProperty("slider 1 color hex");
+            String slider2Color = properties.getProperty("slider 2 color hex");
+            String ballColor = properties.getProperty("ball color hex");
+            String slider1Size = properties.getProperty("slider 1 size");
+            String slider2Size = properties.getProperty("slider 2 size");
+            String ballSize = properties.getProperty("ball size");
+            String slider1Speed = properties.getProperty("slider 1 speed");
+            String slider2Speed = properties.getProperty("slider 2 speed");
+            String ballSpeed = properties.getProperty("ball speed");
+
+            ball.setFill(Paint.valueOf(ballColor));
+            slider1.setFill(Paint.valueOf(slider1Color));
+            slider2.setFill(Paint.valueOf(slider2Color));
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }
 }

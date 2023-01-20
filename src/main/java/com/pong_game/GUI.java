@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -28,7 +29,9 @@ public class GUI extends Application {
     public SettingsMenu settingsMenu;
     public Stage stage;
     public Scene scene;
-    public Circle ball;
+    public Circle ball = createBall();
+    public Rectangle slider1 = createSlider1();
+    public Rectangle slider2 = createSlider2();
     public Text instructions;
     public Set<KeyCode> keyPressed;
 
@@ -46,12 +49,8 @@ public class GUI extends Application {
         this.scene = new Scene(root, Color.LIGHTGRAY);
 
         this.stage = stage;
-        this.ball = createBall();
         this.instructions = createInstructions();
 
-        Rectangle slider1 = createSlider1();
-        Rectangle slider2 = createSlider2();
-        
         Text scorePlayer1Text = createScorePlayer1Text();
         Text scorePlayer2Text = createScorePlayer2Text();
         Text winner = createWinnerText();
@@ -140,7 +139,7 @@ public class GUI extends Application {
         settings.setOnAction(event -> {
             paused = true;
             controller.setPaused(paused);
-            stage.setScene(settingsMenu.createSettingsMenu(scene, stage));
+            stage.setScene(settingsMenu.createSettingsMenu(scene, stage, ball, slider1, slider2));
             stage.show();
         });
 

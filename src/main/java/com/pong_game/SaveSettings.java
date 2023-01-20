@@ -1,7 +1,6 @@
 package com.pong_game;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 public class SaveSettings extends GUI{
 
@@ -155,6 +156,17 @@ public class SaveSettings extends GUI{
                 }
             }
         }
-
     }
+
+    public void setBallColor(Circle ball) {
+        ball.setFill(ballColor.getValue());
+    }
+
+    public void setSlider1Color(Rectangle slider1) {
+        slider1.setFill(slider1Color.getValue());
+    }
+
+    public void setSlider2Color(Rectangle slider2) {
+        slider2.setFill(slider2Color.getValue());
+    } 
 }

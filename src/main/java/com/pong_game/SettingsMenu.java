@@ -12,16 +12,24 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class SettingsMenu extends GUI{
+public class SettingsMenu {
     
     public AnchorPane root;
     public SaveSettings properties;
+    public Circle ball;
+    public Rectangle slider1;
+    public Rectangle slider2;
     
-    public Scene createSettingsMenu(Scene scene, Stage stage) {
+    public Scene createSettingsMenu(Scene scene, Stage stage, Circle ball, Rectangle slider1, Rectangle slider2) {
+        this.ball = ball;
+        this.slider1 = slider1;
+        this.slider2 = slider2;
         AnchorPane root = new AnchorPane();
         this.root = root;
         // add elements to root
@@ -106,7 +114,6 @@ public class SettingsMenu extends GUI{
         createTextNode("Slider 1 Color", 464, 478, 14);
         createTextNode("Slider 2 Color", 464, 503, 14);
         createTextNode("Ball Color", 476, 528, 14);
-        createTextNode("Background Color", 450, 555, 14);
         createTextNode("Slider 1 Movement Speed", 730, 478, 14);
         createTextNode("Slider 2 Movement Speed", 730, 504, 14);
         createTextNode("Ball Movement Speed", 742, 528, 14);
@@ -149,6 +156,7 @@ public class SettingsMenu extends GUI{
         save.setLayoutY(655);
         save.setOnAction(event -> {
             properties.saveSettings();
+            applySettings();
         });
         root.getChildren().add(save);
     }
@@ -161,7 +169,14 @@ public class SettingsMenu extends GUI{
         resetSettings.setOnAction(event -> {
             properties.setDefaultSettings();
             properties.readSettings();
+            applySettings();
         });
         root.getChildren().add(resetSettings);
+    }
+
+    public void applySettings() {
+        properties.setBallColor(ball);
+        properties.setSlider1Color(slider1);
+        properties.setSlider2Color(slider2);
     }
 }
