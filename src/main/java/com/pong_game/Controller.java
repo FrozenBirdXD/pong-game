@@ -34,6 +34,7 @@ public class Controller extends GUI{
     public int playUntil = 3;
     public boolean aPlayerWon = false;
 
+    // if the game is running
     public boolean running = true;
     
     public Circle ball;
@@ -67,11 +68,13 @@ public class Controller extends GUI{
         // reads the settings from the config.properties file and applies them
         readSettings();
 
+        // creates a thread for the game ticks
         AnimationTimer gameTicks = new AnimationTimer() {
             private long prevTime = 0;
             
             @Override
             public void handle(long now) {
+                // stores the time difference between the last last and the current tick
                 long dt = now - prevTime;
                 
                 // checks if the game is not paused and if the time difference from the animation update is bigger that the given value
@@ -108,7 +111,7 @@ public class Controller extends GUI{
         }
         
         // ball collision detection with boundaries
-        if (ball.getCenterY() >= 745 || ball.getCenterY() <= 20) {
+        if (ball.getCenterY() + ball.getRadius() >= 770 || ball.getCenterY() - ball.getRadius() <= 5) {
             velocityY =- velocityY;
         }
     }
@@ -138,7 +141,7 @@ public class Controller extends GUI{
     // resets the sliders and the ball to its initial positions
     public void reset() {
         ballCenterX = 600;
-        // sets the sliders in the middle no matter the height
+        // sets the sliders in the middle no matter the height of the slider
         slider1Y = (int) (800 - slider1.getHeight()) / 2;
         slider2Y = (int) (800 - slider2.getHeight()) / 2;
         
@@ -184,6 +187,7 @@ public class Controller extends GUI{
                 }
                 Platform.runLater(() -> slider1.setY(slider1Y));    // sets the sliders position in the main javafx thread
                 try {
+                    // Thread waits 20ms every time the loop is executed
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -212,6 +216,7 @@ public class Controller extends GUI{
                 }
                 Platform.runLater(() -> slider2.setY(slider2Y));    // sets the sliders position in the main javafx thread
                 try {
+                    // Thread waits 20ms every time the loop is executed
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -241,6 +246,7 @@ public class Controller extends GUI{
         startGame();
     }
 
+    // read the settings stored in the config.properties file and applies them
     public void readSettings() {
         Properties properties = new Properties();
         InputStream input = null;

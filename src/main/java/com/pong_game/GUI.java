@@ -69,7 +69,7 @@ public class GUI extends Application {
         this.controller = new Controller(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, winner, keyPressed, instructions, restartButton);
         controller.startGame();
 
-        // adds all the node to the AnchorPane
+        // adds all the nodes to the AnchorPane
         root.getChildren().addAll(ball, slider1, slider2, scorePlayer1Text, scorePlayer2Text, colon, winner, instructions, settings, pause, restartButton);
 
         } catch (Exception e) {
@@ -137,6 +137,7 @@ public class GUI extends Application {
         settings.setOnAction(event -> {
             paused = true;
             controller.setPaused(paused);
+            // shows the scene created by the SettingsMenu class
             stage.setScene(settingsMenu.createSettingsMenu(scene, stage, ball, slider1, slider2, controller));
             stage.show();
         });
@@ -196,7 +197,6 @@ public class GUI extends Application {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent key) {
-                
                 if (key.getCode().equals(KeyCode.P)) {
                     paused = !paused;
                     controller.setPaused(paused);
@@ -216,7 +216,7 @@ public class GUI extends Application {
             }
         });   
 
-        // adds an event filter so that space and enter don't active the settings button
+        // adds an event filter so that space and enter don't active the settings and pause button
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode().equals(KeyCode.ENTER) || event.getCode().equals(KeyCode.SPACE)) {
                 event.consume();

@@ -41,6 +41,7 @@ public class SaveSettings extends GUI{
         this.playUntilInput = playUntilInput;
     }
 
+    // saves the inputed settings to the config.properties file
     public void saveSettings() {
         Properties properties = new Properties();
         OutputStream output = null;
@@ -75,6 +76,7 @@ public class SaveSettings extends GUI{
         }
     }
 
+    // resets all of the settings to the default
     public void setDefaultSettings() {
         Properties properties = new Properties();
         OutputStream output = null;
@@ -213,6 +215,7 @@ public class SaveSettings extends GUI{
         }
     }
 
+    // reads the settings from the config.properties file and sets the value of the input possibilities
     public void readSettings() {
         Properties properties = new Properties();
         InputStream input = null;
@@ -234,6 +237,7 @@ public class SaveSettings extends GUI{
             String ballSpeed = properties.getProperty("ball speed");
             String playUntilX = properties.getProperty("play until x");
 
+            // gives the string to the visible values of the input possibilities
             this.slider1Color.setValue(Color.valueOf(slider1Color));
             this.slider2Color.setValue(Color.valueOf(slider2Color));    
             this.ballColor.setValue(Color.valueOf(ballColor));
@@ -271,33 +275,33 @@ public class SaveSettings extends GUI{
     } 
 
     public void setBallSize(Circle ball) {
-        double radius = (50 + ballSize.getValue()) / 5;
+        double radius = (50 + ballSize.getValue()) / 5;     // calculates the slider input to the ball radius
         ball.setRadius(radius);
     }
 
     public void setSlider1Size(Rectangle slider1) {
-        double length = (400 + slider1Size.getValue() * 6) / 5;
+        double length = (400 + slider1Size.getValue() * 6) / 5;     // calculates the slider input to the length of slider 1
         slider1.setHeight(length);
     }
 
     public void setSlider2Size(Rectangle slider2) {
-        double length = (400 + slider2Size.getValue() * 6) / 5;
+        double length = (400 + slider2Size.getValue() * 6) / 5;     // calculates the slider input to the length of slider 2
         slider2.setHeight(length);
     }
 
     public void setBallSpeed(Controller controller) {
-        double speed = (50 + 3 * ballSpeed.getValue()) / 25;
+        double speed = (50 + 3 * ballSpeed.getValue()) / 25;        // calculates the slider input to the velocity of the ball
         controller.velocityX = speed;
         controller.velocityY = speed;
     }
 
     public void setSlider1Speed(Controller controller) {
-        double speed = (50 + slider1Speed.getValue()) / 10;
+        double speed = (50 + slider1Speed.getValue()) / 10;     // calculates the slider input to the speed of slider 1 
         controller.slider1Speed = speed;
     }
 
     public void setSlider2Speed(Controller controller) {
-        double speed = (50 + slider2Speed.getValue()) / 10;
+        double speed = (50 + slider2Speed.getValue()) / 10;     // calculates the slider input to the speed of slider 2
         controller.slider2Speed = speed;
     }
 

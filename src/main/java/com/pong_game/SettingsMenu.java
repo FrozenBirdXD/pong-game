@@ -32,11 +32,13 @@ public class SettingsMenu {
         this.slider2 = slider2;
 		// controller is added here to access the velocity variables
 		this.controller = controller;
+
         AnchorPane root = new AnchorPane();
         this.root = root;
         // add elements to root
         Scene settingsScene = new Scene(root, Color.LIGHTGREY);
         
+        // creates all of the input possibilities in settings
         createSettingsButton(scene, stage, root);
         createSaveButton();
         createResetButton();
@@ -56,6 +58,7 @@ public class SettingsMenu {
         Slider ballSpeed = createSettingsSlider(910, 516);
         ChoiceBox playUntilInput = createChoiceBoxPlayUntil(628, 362, 15);
 
+        // gives these input possibilities to the SaveSettings class where everything is stored and processed
         this.properties = new SaveSettings(slider1Color, slider2Color, ballColor, slider1Size, slider2Size, ballSize, slider1Speed, slider2Speed, ballSpeed, playUntilInput);
         
         File file = new File("config.properties");
@@ -103,6 +106,7 @@ public class SettingsMenu {
         root.getChildren().add(textIn);
     }
 
+    // creates moveable sliders for the user to customize the settings
     public Slider createSettingsSlider(int x, int y) {
         Slider slider = new Slider();
         slider.setLayoutX(x);
@@ -133,7 +137,8 @@ public class SettingsMenu {
         root.getChildren().add(colorPicker);
         return colorPicker;
     }
-    
+
+    // creates a choice box where the user can chose how many scores a player needs to win
     public ChoiceBox createChoiceBoxPlayUntil(int x, int y, int width) {
         ChoiceBox box = new ChoiceBox<>();
         box.setLayoutX(x);
@@ -144,6 +149,7 @@ public class SettingsMenu {
         return box;
     }
 
+    // saves all of the settings that were inputed by the user
     public void createSaveButton() {
         Button save = new Button("Save");
         save.setLayoutX(554);
@@ -157,7 +163,7 @@ public class SettingsMenu {
 
     public void createRandomButtonColor() {
         Button resetSettings = new Button("Color");
-        resetSettings.setLayoutX(506);
+        resetSettings.setLayoutX(568);
         resetSettings.setLayoutY(236);
         resetSettings.setOnAction(event -> {
             properties.randomizeColors();
@@ -169,7 +175,7 @@ public class SettingsMenu {
 
     public void createRandomButtonSpeed() {
         Button resetSettings = new Button("Speed");
-        resetSettings.setLayoutX(633);
+        resetSettings.setLayoutX(628);
         resetSettings.setLayoutY(236);
         resetSettings.setOnAction(event -> {
             properties.randomizeSpeed();
@@ -181,7 +187,7 @@ public class SettingsMenu {
 
     public void createRandomButtonSize() {
         Button resetSettings = new Button("Size");
-        resetSettings.setLayoutX(574);
+        resetSettings.setLayoutX(516);
         resetSettings.setLayoutY(236);
         resetSettings.setOnAction(event -> {
             properties.randomizeSize();
@@ -204,6 +210,7 @@ public class SettingsMenu {
         root.getChildren().add(resetSettings);
     }
 
+    // applies the settings to the game nodes
     public void applySettings() {
         properties.setBallColor(ball);
         properties.setSlider1Color(slider1);
