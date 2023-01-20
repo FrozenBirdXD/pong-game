@@ -136,9 +136,10 @@ public class Controller extends GUI{
     
     // resets the sliders and the ball to its initial positions
     public void reset() {
-        slider1Y = 330;
-        slider2Y = 330;
         ballCenterX = 600;
+        // sets the sliders in the middle no matter the height
+        slider1Y = (int) (800 - slider1.getHeight()) / 2;
+        slider2Y = (int) (800 - slider2.getHeight()) / 2;
         
         slider1.setY(slider1Y);
         slider2.setY(slider2Y);
@@ -175,9 +176,9 @@ public class Controller extends GUI{
                         e.printStackTrace();
                     }
                 }
-                if (keyPressed.contains(KeyCode.W) && slider1Y - sliderSpeed > -20) {
+                if (keyPressed.contains(KeyCode.W) && slider1Y - sliderSpeed > -15) {
                     slider1Y -= sliderSpeed;
-                } else if (keyPressed.contains(KeyCode.S) && slider1Y + sliderSpeed < 631) {
+                } else if (keyPressed.contains(KeyCode.S) && slider1Y + slider1.getHeight() + sliderSpeed < 795) {
                     slider1Y += sliderSpeed;
                 }
                 Platform.runLater(() -> slider1.setY(slider1Y));    // sets the sliders position in the main javafx thread
@@ -203,9 +204,9 @@ public class Controller extends GUI{
                         e.printStackTrace();
                     }
                 }
-                if (keyPressed.contains(KeyCode.NUMPAD8) && slider2Y - sliderSpeed > -20) {
+                if (keyPressed.contains(KeyCode.NUMPAD8) && slider2Y - sliderSpeed > -15) {
                     slider2Y -= sliderSpeed;
-                } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + sliderSpeed < 631) {
+                } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + slider2.getHeight() + sliderSpeed < 795) {
                     slider2Y += sliderSpeed;
                 }
                 Platform.runLater(() -> slider2.setY(slider2Y));    // sets the sliders position in the main javafx thread
@@ -260,10 +261,13 @@ public class Controller extends GUI{
             String slider2Speed = properties.getProperty("slider 2 speed");
             String ballSpeed = properties.getProperty("ball speed");
 
-            // applies the stores settings 
+            // applies the stored settings 
             ball.setFill(Paint.valueOf(ballColor));
             slider1.setFill(Paint.valueOf(slider1Color));
             slider2.setFill(Paint.valueOf(slider2Color));
+            ball.setRadius((50 + Double.valueOf(ballSize)) / 5);
+            slider1.setHeight((400 + Double.valueOf(slider1Size) * 6) / 5);
+            slider2.setHeight((400 + Double.valueOf(slider2Size) * 6) / 5);
 
         } catch (IOException io) {
             io.printStackTrace();

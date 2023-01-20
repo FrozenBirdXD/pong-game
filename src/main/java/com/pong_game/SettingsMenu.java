@@ -8,7 +8,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -178,5 +177,8 @@ public class SettingsMenu {
         properties.setBallColor(ball);
         properties.setSlider1Color(slider1);
         properties.setSlider2Color(slider2);
+		properties.setBallSize(ball);
+		properties.setSlider1Size(slider1);
+		properties.setSlider2Size(slider2);
     }
 }

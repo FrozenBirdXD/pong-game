@@ -10,7 +10,6 @@ import java.util.Properties;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -171,4 +170,19 @@ public class SaveSettings extends GUI{
     public void setSlider2Color(Rectangle slider2) {
         slider2.setFill(slider2Color.getValue());
     } 
+
+    public void setBallSize(Circle ball) {
+        double radius = (50 + ballSize.getValue()) / 5;
+        ball.setRadius(radius);
+    }
+
+    public void setSlider1Size(Rectangle slider1) {
+        double length = (400 + slider1Size.getValue() * 6) / 5;
+        slider1.setHeight(length);
+    }
+
+    public void setSlider2Size(Rectangle slider2) {
+        double length = (400 + slider2Size.getValue() * 6) / 5;
+        slider2.setHeight(length);
+    }
 }

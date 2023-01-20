@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -47,7 +46,6 @@ public class GUI extends Application {
         // creates root node and scene 
         AnchorPane root = new AnchorPane();
         this.scene = new Scene(root, Color.LIGHTGRAY);
-
         this.stage = stage;
         this.instructions = createInstructions();
 
