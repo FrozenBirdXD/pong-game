@@ -137,7 +137,7 @@ public class GUI extends Application {
         settings.setOnAction(event -> {
             paused = true;
             controller.setPaused(paused);
-            stage.setScene(settingsMenu.createSettingsMenu(scene, stage, ball, slider1, slider2));
+            stage.setScene(settingsMenu.createSettingsMenu(scene, stage, ball, slider1, slider2, controller));
             stage.show();
         });
 

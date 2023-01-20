@@ -24,11 +24,14 @@ public class SettingsMenu {
     public Circle ball;
     public Rectangle slider1;
     public Rectangle slider2;
+	public Controller controller;
     
-    public Scene createSettingsMenu(Scene scene, Stage stage, Circle ball, Rectangle slider1, Rectangle slider2) {
+    public Scene createSettingsMenu(Scene scene, Stage stage, Circle ball, Rectangle slider1, Rectangle slider2, Controller controller) {
         this.ball = ball;
         this.slider1 = slider1;
         this.slider2 = slider2;
+		// controller is added here to access the velocity variables
+		this.controller = controller;
         AnchorPane root = new AnchorPane();
         this.root = root;
         // add elements to root
@@ -180,5 +183,9 @@ public class SettingsMenu {
 		properties.setBallSize(ball);
 		properties.setSlider1Size(slider1);
 		properties.setSlider2Size(slider2);
+		properties.setBallSpeed(controller);
+        properties.setSlider1Speed(controller);
+        properties.setSlider2Speed(controller);
+        properties.setPlayUntil(controller);
     }
 }

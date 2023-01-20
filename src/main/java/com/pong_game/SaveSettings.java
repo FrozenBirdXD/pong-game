@@ -185,4 +185,25 @@ public class SaveSettings extends GUI{
         double length = (400 + slider2Size.getValue() * 6) / 5;
         slider2.setHeight(length);
     }
+
+    public void setBallSpeed(Controller controller) {
+        double speed = (50 + 3 * ballSpeed.getValue()) / 25;
+        controller.velocityX = speed;
+        controller.velocityY = speed;
+    }
+
+    public void setSlider1Speed(Controller controller) {
+        double speed = (50 + slider1Speed.getValue()) / 10;
+        controller.slider1Speed = speed;
+    }
+
+    public void setSlider2Speed(Controller controller) {
+        double speed = (50 + slider2Speed.getValue()) / 10;
+        controller.slider2Speed = speed;
+    }
+
+    public void setPlayUntil(Controller controller) {
+        int playUntil = Integer.valueOf(String.valueOf(playUntilInput.getValue()));
+        controller.playUntil = playUntil;
+    }
 }

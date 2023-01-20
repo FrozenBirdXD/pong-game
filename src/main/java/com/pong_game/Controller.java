@@ -21,16 +21,17 @@ public class Controller extends GUI{
     Random rand = new Random();
     int randomY = rand.nextInt(700) + 50;
     
-    public int velocityX = 8;
-    public int velocityY = 8;
+    public double velocityX = 8.0;
+    public double velocityY = 8.0;
     public int ballCenterX = 600;
     public int ballCenterY = randomY;
     public int scorePlayer1 = 0;
     public int scorePlayer2 = 0;
     public int slider1Y = 330;
     public int slider2Y = 330;
-    public int sliderSpeed = 10;
-    public int playUntil = 1;
+    public double slider1Speed = 10.0;
+    public double slider2Speed = 10.0;
+    public int playUntil = 3;
     public boolean aPlayerWon = false;
 
     public boolean running = true;
@@ -176,10 +177,10 @@ public class Controller extends GUI{
                         e.printStackTrace();
                     }
                 }
-                if (keyPressed.contains(KeyCode.W) && slider1Y - sliderSpeed > -15) {
-                    slider1Y -= sliderSpeed;
-                } else if (keyPressed.contains(KeyCode.S) && slider1Y + slider1.getHeight() + sliderSpeed < 795) {
-                    slider1Y += sliderSpeed;
+                if (keyPressed.contains(KeyCode.W) && slider1Y - slider1Speed > -15) {
+                    slider1Y -= slider1Speed;
+                } else if (keyPressed.contains(KeyCode.S) && slider1Y + slider1.getHeight() + slider1Speed < 795) {
+                    slider1Y += slider1Speed;
                 }
                 Platform.runLater(() -> slider1.setY(slider1Y));    // sets the sliders position in the main javafx thread
                 try {
@@ -204,10 +205,10 @@ public class Controller extends GUI{
                         e.printStackTrace();
                     }
                 }
-                if (keyPressed.contains(KeyCode.NUMPAD8) && slider2Y - sliderSpeed > -15) {
-                    slider2Y -= sliderSpeed;
-                } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + slider2.getHeight() + sliderSpeed < 795) {
-                    slider2Y += sliderSpeed;
+                if (keyPressed.contains(KeyCode.NUMPAD8) && slider2Y - slider2Speed > -15) {
+                    slider2Y -= slider2Speed;
+                } else if (keyPressed.contains(KeyCode.NUMPAD5) && slider2Y + slider2.getHeight() + slider2Speed < 795) {
+                    slider2Y += slider2Speed;
                 }
                 Platform.runLater(() -> slider2.setY(slider2Y));    // sets the sliders position in the main javafx thread
                 try {
@@ -260,6 +261,7 @@ public class Controller extends GUI{
             String slider1Speed = properties.getProperty("slider 1 speed");
             String slider2Speed = properties.getProperty("slider 2 speed");
             String ballSpeed = properties.getProperty("ball speed");
+            String playUntilX = properties.getProperty("play until x");
 
             // applies the stored settings 
             ball.setFill(Paint.valueOf(ballColor));
@@ -268,9 +270,15 @@ public class Controller extends GUI{
             ball.setRadius((50 + Double.valueOf(ballSize)) / 5);
             slider1.setHeight((400 + Double.valueOf(slider1Size) * 6) / 5);
             slider2.setHeight((400 + Double.valueOf(slider2Size) * 6) / 5);
+            double speed = (50 + 3 * Double.valueOf(ballSpeed)) / 25;
+            this.velocityX = speed;
+            this.velocityY = speed;
+            this.slider1Speed = (50 + Double.valueOf(slider1Speed)) / 10;
+            this.slider2Speed = (50 + Double.valueOf(slider2Speed)) / 10;
+            this.playUntil = Integer.valueOf(playUntilX);
 
         } catch (IOException io) {
-            io.printStackTrace();
+            System.out.println("config file not found");
         } finally {
             if (input != null) {
                 try {
