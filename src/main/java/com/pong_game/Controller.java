@@ -84,6 +84,7 @@ public class Controller extends GUI{
                         // long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
                         // System.out.println(afterUsedMem);
                         ball.setOpacity(0);
+                        winner.setOpacity(1);
                         stop();
                         stopSlidersThread();
                     }
@@ -259,6 +260,7 @@ public class Controller extends GUI{
             String slider2Speed = properties.getProperty("slider 2 speed");
             String ballSpeed = properties.getProperty("ball speed");
 
+            // applies the stores settings 
             ball.setFill(Paint.valueOf(ballColor));
             slider1.setFill(Paint.valueOf(slider1Color));
             slider2.setFill(Paint.valueOf(slider2Color));

@@ -50,7 +50,7 @@ public class SettingsMenu {
         Slider slider1Speed = createSettingsSlider(910, 465);
         Slider slider2Speed = createSettingsSlider(910, 491);
         Slider ballSpeed = createSettingsSlider(910, 516);
-        TextField playUntilInput = createTextField();
+        ChoiceBox playUntilInput = createChoiceBoxPlayUntil(628, 362, 15);
 
         this.properties = new SaveSettings(presetDiff, slider1Color, slider2Color, ballColor, slider1Size, slider2Size, ballSize, slider1Speed, slider2Speed, ballSpeed, playUntilInput);
         
@@ -140,14 +140,14 @@ public class SettingsMenu {
         return colorPicker;
     }
     
-    public TextField createTextField() {
-        TextField field = new TextField();
-        field.setLayoutX(628);
-        field.setLayoutY(362);
-        field.setPrefHeight(26);
-        field.setPrefWidth(33);
-        root.getChildren().add(field);
-        return field;
+    public ChoiceBox createChoiceBoxPlayUntil(int x, int y, int width) {
+        ChoiceBox box = new ChoiceBox<>();
+        box.setLayoutX(x);
+        box.setLayoutY(y);
+        box.setPrefWidth(width);
+        box.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9");
+        root.getChildren().add(box);
+        return box;
     }
 
     public void createSaveButton() {

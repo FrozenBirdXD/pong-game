@@ -27,9 +27,9 @@ public class SaveSettings extends GUI{
     public Slider slider1Speed;
     public Slider slider2Speed;
     public Slider ballSpeed;
-    public TextField playUntilInput;
+    public ChoiceBox playUntilInput;
 
-    public SaveSettings(ChoiceBox presetDiff, ColorPicker slider1Color, ColorPicker slider2Color, ColorPicker ballColor, Slider slider1Size, Slider slider2Size, Slider ballSize, Slider slider1Speed, Slider slider2Speed, Slider ballSpeed, TextField playUntilInput) {
+    public SaveSettings(ChoiceBox presetDiff, ColorPicker slider1Color, ColorPicker slider2Color, ColorPicker ballColor, Slider slider1Size, Slider slider2Size, Slider ballSize, Slider slider1Speed, Slider slider2Speed, Slider ballSpeed, ChoiceBox playUntilInput) {
         this.presetDiff = presetDiff;
         this.slider1Color = slider1Color;
         this.slider2Color = slider2Color;
@@ -51,7 +51,7 @@ public class SaveSettings extends GUI{
             output = new FileOutputStream("config.properties");
 
             // stores all of the user input in the config.properties file
-            properties.setProperty("difficulty", (String) presetDiff.getValue());
+            properties.setProperty("difficulty", String.valueOf(presetDiff.getValue()));
             properties.setProperty("slider 1 color hex", String.valueOf(slider1Color.getValue()));
             properties.setProperty("slider 2 color hex", String.valueOf(slider2Color.getValue()));
             properties.setProperty("ball color hex", String.valueOf(ballColor.getValue()));
@@ -61,7 +61,7 @@ public class SaveSettings extends GUI{
             properties.setProperty("slider 1 speed", String.valueOf(slider1Speed.getValue()));
             properties.setProperty("slider 2 speed", String.valueOf(slider2Speed.getValue()));
             properties.setProperty("ball speed", String.valueOf(ballSpeed.getValue()));
-            // properties.setProperty playUntilInput
+            properties.setProperty("play until x", String.valueOf(playUntilInput.getValue()));
 
             // save settings to project root folder
             properties.store(output, null);
@@ -96,7 +96,7 @@ public class SaveSettings extends GUI{
             properties.setProperty("slider 1 speed", String.valueOf(50.0));
             properties.setProperty("slider 2 speed", String.valueOf(50.0));
             properties.setProperty("ball speed", String.valueOf(50.0));
-            // properties.setProperty playUntilInput
+            properties.setProperty("play until x", String.valueOf(3));
 
             // save settings to project root folder
             properties.store(output, null);
@@ -133,8 +133,9 @@ public class SaveSettings extends GUI{
             String slider1Speed = properties.getProperty("slider 1 speed");
             String slider2Speed = properties.getProperty("slider 2 speed");
             String ballSpeed = properties.getProperty("ball speed");
+            String playUntilX = properties.getProperty("play until x");
 
-            presetDiff.setValue(difficulty);
+            this.presetDiff.setValue(difficulty);
             this.slider1Color.setValue(Color.valueOf(slider1Color));
             this.slider2Color.setValue(Color.valueOf(slider2Color));    
             this.ballColor.setValue(Color.valueOf(ballColor));
@@ -144,6 +145,7 @@ public class SaveSettings extends GUI{
             this.slider1Speed.setValue(Double.valueOf(slider1Speed));
             this.slider2Speed.setValue(Double.valueOf(slider2Speed));
             this.ballSpeed.setValue(Double.valueOf(ballSpeed));
+            this.playUntilInput.setValue(playUntilX);
 
         } catch (IOException io) {
             io.printStackTrace();
