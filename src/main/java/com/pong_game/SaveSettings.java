@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
+import java.util.Random;
 
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
@@ -16,7 +17,6 @@ import javafx.scene.shape.Rectangle;
 
 public class SaveSettings extends GUI{
 
-    public ChoiceBox presetDiff;
     public ColorPicker slider1Color; 
     public ColorPicker slider2Color;
     public ColorPicker ballColor;
@@ -28,8 +28,7 @@ public class SaveSettings extends GUI{
     public Slider ballSpeed;
     public ChoiceBox playUntilInput;
 
-    public SaveSettings(ChoiceBox presetDiff, ColorPicker slider1Color, ColorPicker slider2Color, ColorPicker ballColor, Slider slider1Size, Slider slider2Size, Slider ballSize, Slider slider1Speed, Slider slider2Speed, Slider ballSpeed, ChoiceBox playUntilInput) {
-        this.presetDiff = presetDiff;
+    public SaveSettings(ColorPicker slider1Color, ColorPicker slider2Color, ColorPicker ballColor, Slider slider1Size, Slider slider2Size, Slider ballSize, Slider slider1Speed, Slider slider2Speed, Slider ballSpeed, ChoiceBox playUntilInput) {
         this.slider1Color = slider1Color;
         this.slider2Color = slider2Color;
         this.ballColor = ballColor;
@@ -50,7 +49,6 @@ public class SaveSettings extends GUI{
             output = new FileOutputStream("config.properties");
 
             // stores all of the user input in the config.properties file
-            properties.setProperty("difficulty", String.valueOf(presetDiff.getValue()));
             properties.setProperty("slider 1 color hex", String.valueOf(slider1Color.getValue()));
             properties.setProperty("slider 2 color hex", String.valueOf(slider2Color.getValue()));
             properties.setProperty("ball color hex", String.valueOf(ballColor.getValue()));
@@ -85,7 +83,6 @@ public class SaveSettings extends GUI{
             output = new FileOutputStream("config.properties");
 
             // stores all of the user input in the config.properties file
-            properties.setProperty("difficulty", "Medium");
             properties.setProperty("slider 1 color hex", String.valueOf(Color.rgb(127, 144, 255)));
             properties.setProperty("slider 2 color hex", String.valueOf(Color.rgb(127, 144, 255)));
             properties.setProperty("ball color hex", String.valueOf(Color.rgb(212, 130, 47)));
@@ -112,6 +109,110 @@ public class SaveSettings extends GUI{
         }
     }
 
+    public void randomizeColors() {
+        Properties properties = new Properties();
+        OutputStream output = null;
+        Random rand = new Random();
+
+        try {
+            output = new FileOutputStream("config.properties");
+
+            // stores all of the user input in the config.properties file
+            properties.setProperty("slider 1 color hex", String.valueOf(Color.rgb(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
+            properties.setProperty("slider 2 color hex", String.valueOf(Color.rgb(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
+            properties.setProperty("ball color hex", String.valueOf(Color.rgb(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))));
+            properties.setProperty("slider 1 size", String.valueOf(slider1Size.getValue()));
+            properties.setProperty("slider 2 size", String.valueOf(slider2Size.getValue()));
+            properties.setProperty("ball size", String.valueOf(ballSize.getValue()));
+            properties.setProperty("slider 1 speed", String.valueOf(slider1Speed.getValue()));
+            properties.setProperty("slider 2 speed", String.valueOf(slider2Speed.getValue()));
+            properties.setProperty("ball speed", String.valueOf(ballSpeed.getValue()));
+            properties.setProperty("play until x", String.valueOf(playUntilInput.getValue()));
+
+            // save settings to project root folder
+            properties.store(output, null);
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void randomizeSpeed() {
+        Properties properties = new Properties();
+        OutputStream output = null;
+        Random rand = new Random();
+
+        try {
+            output = new FileOutputStream("config.properties");
+
+            // stores all of the user input in the config.properties file
+            properties.setProperty("slider 1 color hex", String.valueOf(slider1Color.getValue()));
+            properties.setProperty("slider 2 color hex", String.valueOf(slider2Color.getValue()));
+            properties.setProperty("ball color hex", String.valueOf(ballColor.getValue()));
+            properties.setProperty("slider 1 size", String.valueOf(slider1Size.getValue()));
+            properties.setProperty("slider 2 size", String.valueOf(slider2Size.getValue()));
+            properties.setProperty("ball size", String.valueOf(ballSize.getValue()));
+            properties.setProperty("slider 1 speed", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("slider 2 speed", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("ball speed", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("play until x", String.valueOf(playUntilInput.getValue()));
+
+            // save settings to project root folder
+            properties.store(output, null);
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void randomizeSize() {
+        Properties properties = new Properties();
+        OutputStream output = null;
+        Random rand = new Random();
+
+        try {
+            output = new FileOutputStream("config.properties");
+
+            // stores all of the user input in the config.properties file
+            properties.setProperty("slider 1 color hex", String.valueOf(slider1Color.getValue()));
+            properties.setProperty("slider 2 color hex", String.valueOf(slider2Color.getValue()));
+            properties.setProperty("ball color hex", String.valueOf(ballColor.getValue()));
+            properties.setProperty("slider 1 size", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("slider 2 size", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("ball size", String.valueOf(rand.nextInt(101)));
+            properties.setProperty("slider 1 speed", String.valueOf(slider1Speed.getValue()));
+            properties.setProperty("slider 2 speed", String.valueOf(slider2Speed.getValue()));
+            properties.setProperty("ball speed", String.valueOf(ballSpeed.getValue()));
+            properties.setProperty("play until x", String.valueOf(playUntilInput.getValue()));
+            // save settings to project root folder
+            properties.store(output, null);
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void readSettings() {
         Properties properties = new Properties();
         InputStream input = null;
@@ -122,7 +223,6 @@ public class SaveSettings extends GUI{
             properties.load(input);
 
             // reads all of the settings and saves it to a string
-            String difficulty = properties.getProperty("difficulty");
             String slider1Color = properties.getProperty("slider 1 color hex");
             String slider2Color = properties.getProperty("slider 2 color hex");
             String ballColor = properties.getProperty("ball color hex");
@@ -134,7 +234,6 @@ public class SaveSettings extends GUI{
             String ballSpeed = properties.getProperty("ball speed");
             String playUntilX = properties.getProperty("play until x");
 
-            this.presetDiff.setValue(difficulty);
             this.slider1Color.setValue(Color.valueOf(slider1Color));
             this.slider2Color.setValue(Color.valueOf(slider2Color));    
             this.ballColor.setValue(Color.valueOf(ballColor));

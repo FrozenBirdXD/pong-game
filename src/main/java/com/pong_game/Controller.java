@@ -251,7 +251,6 @@ public class Controller extends GUI{
             properties.load(input);
 
             // reads all of the settings and saves it to a string
-            String difficulty = properties.getProperty("difficulty");
             String slider1Color = properties.getProperty("slider 1 color hex");
             String slider2Color = properties.getProperty("slider 2 color hex");
             String ballColor = properties.getProperty("ball color hex");

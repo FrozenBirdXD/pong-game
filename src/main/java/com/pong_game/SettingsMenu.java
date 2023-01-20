@@ -42,7 +42,9 @@ public class SettingsMenu {
         createResetButton();
         createSettingsLabel();
         createAllText();
-        ChoiceBox presetDiff = createChoiceBox(539, 234, 100);
+        createRandomButtonColor();
+        createRandomButtonSize();
+        createRandomButtonSpeed();
         ColorPicker slider1Color = createColorPicker(579, 460);
         ColorPicker slider2Color = createColorPicker(579, 486);
         ColorPicker ballColor = createColorPicker(579, 511);
@@ -54,7 +56,7 @@ public class SettingsMenu {
         Slider ballSpeed = createSettingsSlider(910, 516);
         ChoiceBox playUntilInput = createChoiceBoxPlayUntil(628, 362, 15);
 
-        this.properties = new SaveSettings(presetDiff, slider1Color, slider2Color, ballColor, slider1Size, slider2Size, ballSize, slider1Speed, slider2Speed, ballSpeed, playUntilInput);
+        this.properties = new SaveSettings(slider1Color, slider2Color, ballColor, slider1Size, slider2Size, ballSize, slider1Speed, slider2Speed, ballSpeed, playUntilInput);
         
         File file = new File("config.properties");
         // if the config.properties file exists but is empty, then the file will be filled with the default settings
@@ -110,7 +112,7 @@ public class SettingsMenu {
     }
     
     public void createAllText() {
-        createTextNode("Preset Difficulty", 531, 222, 18);
+        createTextNode("Random Settings", 531, 222, 18);
         createTextNode("Custom Settings", 528, 329, 18);
         createTextNode("Play Until Score", 497, 381, 18);
         createTextNode("Slider 1 Color", 464, 478, 14);
@@ -122,16 +124,6 @@ public class SettingsMenu {
         createTextNode("Slider 1 Size", 157, 478, 14);
         createTextNode("Slider 2 Size", 157, 502, 14);
         createTextNode("Ball Size", 169, 527, 14);
-    }
-    
-    public ChoiceBox createChoiceBox(int x, int y, int width) {
-        ChoiceBox box = new ChoiceBox<>();
-        box.setLayoutX(x);
-        box.setLayoutY(y);
-        box.setPrefWidth(width);
-        box.getItems().addAll("Easy", "Medium", "HARD");
-        root.getChildren().add(box);
-        return box;
     }
     
     public ColorPicker createColorPicker(int x, int y) {
@@ -161,6 +153,42 @@ public class SettingsMenu {
             applySettings();
         });
         root.getChildren().add(save);
+    }
+
+    public void createRandomButtonColor() {
+        Button resetSettings = new Button("Color");
+        resetSettings.setLayoutX(506);
+        resetSettings.setLayoutY(236);
+        resetSettings.setOnAction(event -> {
+            properties.randomizeColors();
+            properties.readSettings();
+            applySettings();
+        });
+        root.getChildren().add(resetSettings);
+    }
+
+    public void createRandomButtonSpeed() {
+        Button resetSettings = new Button("Speed");
+        resetSettings.setLayoutX(633);
+        resetSettings.setLayoutY(236);
+        resetSettings.setOnAction(event -> {
+            properties.randomizeSpeed();
+            properties.readSettings();
+            applySettings();
+        });
+        root.getChildren().add(resetSettings);
+    }
+
+    public void createRandomButtonSize() {
+        Button resetSettings = new Button("Size");
+        resetSettings.setLayoutX(574);
+        resetSettings.setLayoutY(236);
+        resetSettings.setOnAction(event -> {
+            properties.randomizeSize();
+            properties.readSettings();
+            applySettings();
+        });
+        root.getChildren().add(resetSettings);
     }
 
     // resets all of the users settings to the default settings
