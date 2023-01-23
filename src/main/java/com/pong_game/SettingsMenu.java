@@ -19,12 +19,12 @@ import javafx.stage.Stage;
 
 public class SettingsMenu {
     
-    public AnchorPane root;
-    public SaveSettings properties;
-    public Circle ball;
-    public Rectangle slider1;
-    public Rectangle slider2;
-	public Controller controller;
+    private AnchorPane root;
+    private SaveSettings properties;
+    private Circle ball;
+    private Rectangle slider1;
+    private Rectangle slider2;
+	private Controller controller;
     
     public Scene createSettingsMenu(Scene scene, Stage stage, Circle ball, Rectangle slider1, Rectangle slider2, Controller controller) {
         this.ball = ball;
@@ -77,7 +77,7 @@ public class SettingsMenu {
         return settingsScene;
     }
     
-    public void createSettingsButton(Scene scene, Stage stage, AnchorPane root) {
+    private void createSettingsButton(Scene scene, Stage stage, AnchorPane root) {
         Button settings = new Button("");
         settings.setLayoutX(10);    
         settings.setLayoutY(5);
@@ -92,7 +92,7 @@ public class SettingsMenu {
         root.getChildren().add(settings);
     }
     
-    public void createSettingsLabel() {
+    private void createSettingsLabel() {
         Label label = new Label("Settings");
         label.setLayoutX(530);
         label.setLayoutY(112);
@@ -100,14 +100,14 @@ public class SettingsMenu {
         root.getChildren().add(label);
     }
     
-    public void createTextNode(String text, int x, int y, int font) {
+    private void createTextNode(String text, int x, int y, int font) {
         Text textIn = new Text(x, y, text);
         textIn.setFont(Font.font("Veranda", font));
         root.getChildren().add(textIn);
     }
 
     // creates moveable sliders for the user to customize the settings
-    public Slider createSettingsSlider(int x, int y) {
+    private Slider createSettingsSlider(int x, int y) {
         Slider slider = new Slider();
         slider.setLayoutX(x);
         slider.setLayoutY(y);
@@ -115,7 +115,7 @@ public class SettingsMenu {
         return slider;
     }
     
-    public void createAllText() {
+    private void createAllText() {
         createTextNode("Random Settings", 531, 222, 18);
         createTextNode("Custom Settings", 528, 329, 18);
         createTextNode("Play Until Score", 497, 381, 18);
@@ -130,7 +130,7 @@ public class SettingsMenu {
         createTextNode("Ball Size", 169, 527, 14);
     }
     
-    public ColorPicker createColorPicker(int x, int y) {
+    private ColorPicker createColorPicker(int x, int y) {
         ColorPicker colorPicker = new ColorPicker();
         colorPicker.setLayoutX(x);
         colorPicker.setLayoutY(y);
@@ -139,7 +139,7 @@ public class SettingsMenu {
     }
 
     // creates a choice box where the user can chose how many scores a player needs to win
-    public ChoiceBox createChoiceBoxPlayUntil(int x, int y, int width) {
+    private ChoiceBox createChoiceBoxPlayUntil(int x, int y, int width) {
         ChoiceBox box = new ChoiceBox<>();
         box.setLayoutX(x);
         box.setLayoutY(y);
@@ -150,7 +150,7 @@ public class SettingsMenu {
     }
 
     // saves all of the settings that were inputed by the user
-    public void createSaveButton() {
+    private void createSaveButton() {
         Button save = new Button("Save");
         save.setLayoutX(554);
         save.setLayoutY(655);
@@ -161,7 +161,7 @@ public class SettingsMenu {
         root.getChildren().add(save);
     }
 
-    public void createRandomButtonColor() {
+    private void createRandomButtonColor() {
         Button resetSettings = new Button("Color");
         resetSettings.setLayoutX(568);
         resetSettings.setLayoutY(236);
@@ -173,7 +173,7 @@ public class SettingsMenu {
         root.getChildren().add(resetSettings);
     }
 
-    public void createRandomButtonSpeed() {
+    private void createRandomButtonSpeed() {
         Button resetSettings = new Button("Speed");
         resetSettings.setLayoutX(628);
         resetSettings.setLayoutY(236);
@@ -185,7 +185,7 @@ public class SettingsMenu {
         root.getChildren().add(resetSettings);
     }
 
-    public void createRandomButtonSize() {
+    private void createRandomButtonSize() {
         Button resetSettings = new Button("Size");
         resetSettings.setLayoutX(516);
         resetSettings.setLayoutY(236);
@@ -198,7 +198,7 @@ public class SettingsMenu {
     }
 
     // resets all of the users settings to the default settings
-    public void createResetButton() {
+    private void createResetButton() {
         Button resetSettings = new Button("Reset");
         resetSettings.setLayoutX(600);
         resetSettings.setLayoutY(655);
@@ -211,7 +211,7 @@ public class SettingsMenu {
     }
 
     // applies the settings to the game nodes
-    public void applySettings() {
+    private void applySettings() {
         properties.setBallColor(ball);
         properties.setSlider1Color(slider1);
         properties.setSlider2Color(slider2);

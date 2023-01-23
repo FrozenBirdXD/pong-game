@@ -21,31 +21,31 @@ public class Controller extends GUI{
     Random rand = new Random();
     int randomY = rand.nextInt(700) + 50;
     
-    public double velocityX = 8.0;
-    public double velocityY = 8.0;
-    public int ballCenterX = 600;
-    public int ballCenterY = randomY;
-    public int scorePlayer1 = 0;
-    public int scorePlayer2 = 0;
-    public int slider1Y = 330;
-    public int slider2Y = 330;
-    public double slider1Speed = 10.0;
-    public double slider2Speed = 10.0;
-    public int playUntil = 3;
-    public boolean aPlayerWon = false;
+    double velocityX = 8.0;
+    double velocityY = 8.0;
+    private int ballCenterX = 600;
+    private int ballCenterY = randomY;
+    private int scorePlayer1 = 0;
+    private int scorePlayer2 = 0;
+    private int slider1Y = 330;
+    private int slider2Y = 330;
+    double slider1Speed = 10.0;
+    double slider2Speed = 10.0;
+    int playUntil = 3;
+    private boolean aPlayerWon = false;
 
     // if the game is running
-    public boolean running = true;
+    private boolean running = true;
     
-    public Circle ball;
-    public Rectangle slider1;
-    public Rectangle slider2;
-    public Text scorePlayer1Text;
-    public Text scorePlayer2Text;
-    public Text winner;
-    public Set keyPressed;
-    public Text instructions;
-    public Button restartButton;
+    private Circle ball;
+    private Rectangle slider1;
+    private Rectangle slider2;
+    private Text scorePlayer1Text;
+    private Text scorePlayer2Text;
+    private Text winner;
+    private Set keyPressed;
+    Text instructions;
+    private Button restartButton;
 
     public Controller(Circle ball, Rectangle slider1, Rectangle slider2, Text scorePlayer1Text, Text scorePlayer2Text, Text winner, Set keyPressed, Text instructions, Button restartButton) {
         this.ball = ball;
@@ -99,7 +99,7 @@ public class Controller extends GUI{
         gameTicks.start();
     }
     
-    public void ballCollision() {
+    private void ballCollision() {
         // ball collision detection with slider 1
         if (ball.getBoundsInParent().intersects(slider1.getBoundsInParent())) {
             velocityX =- velocityX;
@@ -116,13 +116,13 @@ public class Controller extends GUI{
         }
     }
     
-    public void updateBallPosition() {
+    private void updateBallPosition() {
         ball.setCenterX(ballCenterX += velocityX);
         ball.setCenterY(ballCenterY += velocityY);
     }
     
     // checks if the ball scored a point and resets the game
-    public void scorePoint() {
+    private void scorePoint() {
         if (ballCenterX - ball.getRadius() <= 0) {
             this.scorePlayer2 += 1;
             String scoreR1 = String.valueOf(this.scorePlayer2);
@@ -139,7 +139,7 @@ public class Controller extends GUI{
     }
     
     // resets the sliders and the ball to its initial positions
-    public void reset() {
+    private void reset() {
         ballCenterX = 600;
         // sets the sliders in the middle no matter the height of the slider
         slider1Y = (int) (800 - slider1.getHeight()) / 2;
@@ -150,7 +150,7 @@ public class Controller extends GUI{
         ball.setCenterX(ballCenterX);
     }
     
-    public void ifPlayerWins() {
+    private void ifPlayerWins() {
         if (this.scorePlayer1 == playUntil) {
             winner.setText("Player 1 WINS!");
             aPlayerWon = true;
@@ -164,11 +164,11 @@ public class Controller extends GUI{
         }
     }
 
-    public void stopSlidersThread() {
+    private void stopSlidersThread() {
         running = false;
     }
 
-    public void moveSlider1() {
+    private void moveSlider1() {
         // creates a new Thread for the movement of slider1
         Thread slider1Thread = new Thread(() -> {
             while (running) {   
@@ -197,7 +197,7 @@ public class Controller extends GUI{
         slider1Thread.start();
     }
 
-    public void moveSlider2() {
+    private void moveSlider2() {
         // creates a new Thread for the movement of slider2
         Thread slider2Thread = new Thread(() -> {
             while (running) {
@@ -247,7 +247,7 @@ public class Controller extends GUI{
     }
 
     // read the settings stored in the config.properties file and applies them
-    public void readSettings() {
+    private void readSettings() {
         Properties properties = new Properties();
         InputStream input = null;
 

@@ -22,17 +22,17 @@ import javafx.stage.Stage;
 
 public class GUI extends Application {
 
-    public boolean paused = true;
+    boolean paused = true;
 
-    public Controller controller;
-    public SettingsMenu settingsMenu;
-    public Stage stage;
-    public Scene scene;
-    public Circle ball = createBall();
-    public Rectangle slider1 = createSlider1();
-    public Rectangle slider2 = createSlider2();
-    public Text instructions;
-    public Set<KeyCode> keyPressed;
+    private Controller controller;
+    private SettingsMenu settingsMenu;
+    private Stage stage;
+    private Scene scene;
+    private Circle ball = createBall();
+    private Rectangle slider1 = createSlider1();
+    private Rectangle slider2 = createSlider2();
+    private Text instructions;
+    private Set<KeyCode> keyPressed;
 
     public static void main(String[] args) {
         // long beforeUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
@@ -77,7 +77,7 @@ public class GUI extends Application {
         }
     }
 
-    public Rectangle createSlider1() {
+    private Rectangle createSlider1() {
         // constructor: LeftCornerX, LeftCornerY, Width, Height
         Rectangle slider1 = new Rectangle(50, 330, 20, 140);
         slider1.setArcHeight(5.0);
@@ -88,7 +88,7 @@ public class GUI extends Application {
         return slider1;
     }
 
-    public Rectangle createSlider2() {
+    private Rectangle createSlider2() {
         // constructor: LeftCornerX, LeftCornerY, Width, Height
         Rectangle slider2 = new Rectangle(1130, 330, 20, 140);
         slider2.setArcHeight(5.0);
@@ -99,7 +99,7 @@ public class GUI extends Application {
         return slider2;
     }
 
-    public Text createScorePlayer1Text() {
+    private Text createScorePlayer1Text() {
         Text scorePlayer1Text = new Text(485, 98, "0");
         scorePlayer1Text.setFont(Font.font("Veranda", 60));
         scorePlayer1Text.setTextAlignment(TextAlignment.CENTER);
@@ -108,7 +108,7 @@ public class GUI extends Application {
         return scorePlayer1Text;
     }
 
-    public Text createScorePlayer2Text() {
+    private Text createScorePlayer2Text() {
         Text scorePlayer2Text = new Text(554, 98, "0");
         scorePlayer2Text.setFont(Font.font("Veranda", 60));
         scorePlayer2Text.setTextAlignment(TextAlignment.CENTER);
@@ -117,7 +117,7 @@ public class GUI extends Application {
         return scorePlayer2Text;
     }
 
-    public Button createRestartButton() {
+    private Button createRestartButton() {
         Button restartButton = new Button("New Game");
         restartButton.setFont(Font.font("Veranda", 18));
         restartButton.setLayoutX(544);
@@ -129,7 +129,7 @@ public class GUI extends Application {
         return restartButton;
     }
 
-    public Button createSettingsButton() {
+    private Button createSettingsButton() {
         // adds a settings button
         Button settings = new Button("");
         settings.setLayoutX(10);    
@@ -148,7 +148,7 @@ public class GUI extends Application {
         return settings;
     }
 
-    public void configsStage() {
+    private void configsStage() {
         stage.setScene(scene);
         stage.setTitle("Pong");
         stage.setResizable(false);
@@ -160,7 +160,7 @@ public class GUI extends Application {
         stage.getIcons().add(icon);
     }
 
-    public Button createPauseButton() {
+    private Button createPauseButton() {
         // adds a pause button
         Button pause = new Button("");
         pause.setLayoutX(40);   
@@ -178,21 +178,21 @@ public class GUI extends Application {
         return pause;
     }
 
-    public Circle createBall() {
+    private Circle createBall() {
         // constructor: CenterX, CenterY, Radius, Color
         Circle ball = new Circle(600, 350, 20, Color.rgb(212, 130, 47));
         ball.setOpacity(0);
         return ball;
     }
 
-    public Text createInstructions() {
+    private Text createInstructions() {
         // constructor: OriginX, OriginY, "Text"
         Text instructions = new Text(524, 415, "     Instructions:\nP:                          Pause the game\nW/S:                     Move slider1\nnum8/num5:        Move slider2\n\n=> Press P to start the game!");
         instructions.setFont(Font.font("Veranda", 14));
         return instructions;
     }
 
-    public void sceneHandlers() {
+    private void sceneHandlers() {
         // adds an event handler to the scene to listen for keys pressed
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -224,14 +224,14 @@ public class GUI extends Application {
         });
     }
 
-    public Text createWinnerText() {
+    private Text createWinnerText() {
         Text winner = new Text(480, 486, "");
         winner.setTextAlignment(TextAlignment.CENTER);  
         winner.setFont(Font.font("Veranda", 40));
         return winner;
     }
 
-    public Text createColon() {
+    private Text createColon() {
         Text colon = new Text(592, 98, ":");
         colon.setFont(Font.font("Veranda", 60));
         colon.setOpacity(0.7);
